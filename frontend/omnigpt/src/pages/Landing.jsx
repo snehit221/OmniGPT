@@ -5,6 +5,7 @@ import backgroundImage from '../assets/images/landing-background.png'
 import logoWhite from '../assets/images/logos/logo-no-background.svg'
 import gemini from '../assets/images/gemini.png'
 import chatgpt from '../assets/images/chatgpt.png'
+import { useNavigate } from 'react-router-dom'
 import {
   ArrowPathIcon,
   CloudArrowUpIcon,
@@ -21,10 +22,10 @@ const testimonial = {
 }
 
 const navigation = [
-  { name: 'Get Started', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Contact', href: '#' },
-  { name: 'About Us', href: '#' },
+  { name: 'Get Started', route: '/register' },
+  { name: 'Features', route: '#' },
+  { name: 'Contact', route: '#' },
+  { name: 'About Us', route: '#' },
 ]
 const features = [
   {
@@ -86,8 +87,10 @@ const footerNavigation = {
   ],
 }
 
-export default function Example() {
+export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const navigate = useNavigate()
 
   return (
     <div className="bg-white">
@@ -116,7 +119,7 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-white">
+              <a key={item.name} onClick={() => navigate(item.route)} className="text-sm font-semibold leading-6 text-white">
                 {item.name}
               </a>
             ))}
@@ -152,13 +155,13 @@ export default function Example() {
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
                   {navigation.map((item) => (
-                    <a
+                    <p
                       key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      onClick={() => navigate(item.route)}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 hover:cursor-pointer"
                     >
                       {item.name}
-                    </a>
+                    </p>
                   ))}
                 </div>
                 <div className="py-6">
@@ -210,8 +213,8 @@ export default function Example() {
                 
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <a
-                    href="#"
-                    className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                    onClick={() => navigate('/register')}
+                    className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 hover:cursor-pointer"
                   >
                     Get started
                   </a>
