@@ -2,9 +2,43 @@ import { useState } from "react";
 import backgroundImage from "../assets/images/landing-background.png";
 import logoWhite from "../assets/images/logos/logo-no-background.svg";
 import { useNavigate } from 'react-router-dom'
+import { auth, db } from "../config/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
     const navigate = useNavigate()
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [name, setName] = useState("");
+
+    const handleRegister = async (e) => {
+      e.preventDefault();
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        const user = auth.currentUser;
+        console.log(user);
+        if (user) {
+          await setDoc(doc(db, "users", user.uid), {
+            email: user.email,
+            name: name
+          });
+        }
+        console.log("User Registered Successfully!!");
+        toast.success("User Registered Successfully !", {
+          position: "top-right"
+        });
+      } catch (error) {
+        console.log(error.message);
+        toast.error(error.message, {
+          position: "top-right"
+        });
+      }
+    };
+    
 
   return (
     <>
@@ -18,7 +52,7 @@ export default function Register() {
 
         <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-10 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleRegister}>
               <div>
                 <label
                   htmlFor="email"
@@ -34,6 +68,7 @@ export default function Register() {
                     type="name"
                     autoComplete="name"
                     required
+                    onChange={(e) => setName(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -53,6 +88,7 @@ export default function Register() {
                     type="email"
                     autoComplete="email"
                     required
+                    onChange={(e) => setEmail(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -67,11 +103,12 @@ export default function Register() {
                 </label>
                 <div className="mt-2">
                   <input
-                    id="password"
+                    id="confirmPassword"
                     name="password"
                     type="password"
                     autoComplete="current-password"
                     required
+                    onChange={(e) => setPassword(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -91,6 +128,7 @@ export default function Register() {
                     type="password"
                     autoComplete="current-password"
                     required
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -189,6 +227,7 @@ export default function Register() {
                   </a>
                 </p>
               </div>
+              <ToastContainer />
             </div>
           </div>
         </div>
