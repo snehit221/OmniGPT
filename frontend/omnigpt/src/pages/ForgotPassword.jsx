@@ -5,11 +5,12 @@ import logo from '../assets/images/logos/logo-no-background.svg';
 import "../stylesheets/login.css";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -18,6 +19,7 @@ function ForgotPassword() {
       await sendPasswordResetEmail(auth, email);
       toast.success("Reset password link sent!", { position: "top-right" });
       setLoading(false);
+      setTimeout(() => navigate("/login"),4000)
     } catch (error) {
       toast.error(error.message, { position: "top-right" });
       setLoading(false);

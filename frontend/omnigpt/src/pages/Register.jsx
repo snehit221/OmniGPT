@@ -32,6 +32,7 @@ export default function Register() {
         toast.success("User Registered Successfully !", {
           position: "top-right"
         });
+        navigate('/login')
       } catch (error) {
         console.log(error.message);
         toast.error(error.message, {
@@ -54,6 +55,10 @@ export default function Register() {
           toast.success("User Registered Successfully !", {
             position: "top-right"
           });
+          console.log("User",result.user)
+          localStorage.setItem("token", user.accessToken);
+          localStorage.setItem("user", user.email);
+          setTimeout(() => navigate("/pricing"),4000)
         }
       });
     };
