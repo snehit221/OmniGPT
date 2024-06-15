@@ -1,12 +1,13 @@
 import { useState } from "react";
 import backgroundImage from "../assets/images/landing-background.png";
 import logoWhite from "../assets/images/logos/logo-no-background.svg";
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { auth, db } from "../config/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function Register() {
     const navigate = useNavigate()
@@ -37,6 +38,24 @@ export default function Register() {
           position: "top-right"
         });
       }
+    };
+
+    function googleLogin() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider).then(async (result) => {
+        console.log(result);
+        const user = result.user;
+        if (result.user) {
+          await setDoc(doc(db, "users", user.uid), {
+            email: user.email,
+            name: user.displayName,
+            photo: user.photoURL
+          });
+          toast.success("User Registered Successfully !", {
+            position: "top-right"
+          });
+        }
+      });
     };
     
 
@@ -187,7 +206,7 @@ export default function Register() {
 
               <div className="mt-5 grid grid-cols-1 gap-4">
                 <a
-                  href="#"
+                  onClick={googleLogin}
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                 >
                   <svg
@@ -219,12 +238,12 @@ export default function Register() {
 
                 <p className="mt-5 text-center text-sm text-gray-500">
                   Already a member?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    to="/login"
                     className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                   >
                     Click here to login
-                  </a>
+                  </Link>
                 </p>
               </div>
               <ToastContainer />
