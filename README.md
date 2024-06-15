@@ -96,4 +96,4 @@ Make sure you have the following installed on your machine:
 To build the project for production, use:
 
 ```bash
-npm run build
+npm run dev
