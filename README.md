@@ -61,8 +61,10 @@ Transparent and flexible pricing options tailored to different user needs.
 - **React** - The web framework used
 - **npm** - Dependency Management
 - **Tailwind CSS** - CSS Framework
+- **Vite** - Local Deployment Server
 - **Firebase** - Backend as a Service (BaaS) for authentication and database
 - **Netlify** - Hosting platform
+
 
 ## Running the Frontend
 
