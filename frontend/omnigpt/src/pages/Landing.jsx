@@ -26,6 +26,8 @@ const navigation = [
   { name: 'Features', route: '#' },
   { name: 'Contact', route: '#' },
   { name: 'About Us', route: '#' },
+  { name: 'Pricing', route: '/pricing' },
+
 ]
 const features = [
   {
@@ -68,7 +70,7 @@ const footerNavigation = {
     { name: 'Insights', href: '#' },
   ],
   support: [
-    { name: 'Pricing', href: '#' },
+    { name: 'Pricing', href: '/pricing' },
     { name: 'Documentation', href: '#' },
     { name: 'Guides', href: '#' },
     { name: 'API Status', href: '#' },
