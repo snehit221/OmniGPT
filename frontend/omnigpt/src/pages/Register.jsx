@@ -1,7 +1,7 @@
 import { useState } from "react";
 import backgroundImage from "../assets/images/landing-background.png";
 import logoWhite from "../assets/images/logos/logo-no-background.svg";
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { auth, db } from "../config/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
@@ -32,6 +32,7 @@ export default function Register() {
         toast.success("User Registered Successfully !", {
           position: "top-right"
         });
+        navigate('/login')
       } catch (error) {
         console.log(error.message);
         toast.error(error.message, {
@@ -54,6 +55,10 @@ export default function Register() {
           toast.success("User Registered Successfully !", {
             position: "top-right"
           });
+          console.log("User",result.user)
+          localStorage.setItem("token", user.accessToken);
+          localStorage.setItem("user", user.email);
+          setTimeout(() => navigate("/pricing"),4000)
         }
       });
     };
@@ -238,12 +243,12 @@ export default function Register() {
 
                 <p className="mt-5 text-center text-sm text-gray-500">
                   Already a member?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    to="/login"
                     className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                   >
                     Click here to login
-                  </a>
+                  </Link>
                 </p>
               </div>
               <ToastContainer />

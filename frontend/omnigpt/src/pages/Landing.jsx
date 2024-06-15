@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import backgroundImage from '../assets/images/landing-background.png'
 import logoWhite from '../assets/images/logos/logo-no-background.svg'
 import gemini from '../assets/images/gemini.png'
 import chatgpt from '../assets/images/chatgpt.png'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowPathIcon,
   CloudArrowUpIcon,
@@ -23,9 +23,8 @@ const testimonial = {
 
 const navigation = [
   { name: 'Get Started', route: '/register' },
-  { name: 'Features', route: '#' },
-  { name: 'Contact', route: '#' },
-  { name: 'About Us', route: '#' },
+  { name: 'Pricing', route: '/pricing' },
+
 ]
 const features = [
   {
@@ -68,7 +67,7 @@ const footerNavigation = {
     { name: 'Insights', href: '#' },
   ],
   support: [
-    { name: 'Pricing', href: '#' },
+    { name: 'Pricing', href: '/pricing' },
     { name: 'Documentation', href: '#' },
     { name: 'Guides', href: '#' },
     { name: 'API Status', href: '#' },
@@ -89,23 +88,32 @@ const footerNavigation = {
 
 export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
+  const [user,setUser] = useState(null)
   const navigate = useNavigate()
+  const token = localStorage.getItem("token")
 
+  useEffect(()=>{
+    if(token){
+      setUser(localStorage.getItem("user"))
+      console.log(localStorage.getItem("user"))
+    }
+    console.log("Token", token)
+    console.log("User",user)
+  },[])
   return (
     <div className="bg-white">
       {/* Header */}
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">OmniGPT</span>
               <img
                 className="h-8 w-auto"
                 src={logoWhite}
                 alt=""
               />
-            </a>
+            </Link>
           </div>
           <div className="flex lg:hidden">
             <button
@@ -119,29 +127,25 @@ export default function Landing() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} onClick={() => navigate(item.route)} className="text-sm font-semibold leading-6 text-white">
+              <p key={item.name} onClick={() => navigate(item.route)} className="text-sm font-semibold leading-6 text-white cursor-pointer">
                 {item.name}
-              </a>
+              </p>
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-white">
+            {!user ? 
+            <Link to="/login" className="text-sm font-semibold leading-6 text-white">
               Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            </Link>
+            : 
+            <div className='font-semibold text-white'> Welcome {user} </div>
+          }
           </div>
         </nav>
         <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
-                />
-              </a>
               <button
                 type="button"
                 className="-m-2.5 rounded-md p-2.5 text-gray-700"
@@ -165,12 +169,12 @@ export default function Landing() {
                   ))}
                 </div>
                 <div className="py-6">
-                  <a
-                    href="#"
+                  <Link
+                    to="/login"
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Log in
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -256,7 +260,7 @@ export default function Landing() {
         </div>
 
         {/* Feature section */}
-        <div className="mt-32 sm:mt-56">
+        <div id='#features' className="mt-32 sm:mt-56">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl sm:text-center">
               <h2 className="text-base font-semibold leading-7 text-indigo-600">Everything you need</h2>
@@ -336,6 +340,7 @@ export default function Landing() {
       </main>
 
       {/* Footer */}
+      {/* This is a dummy footer */}
       <footer className="mt-32 bg-gray-900 sm:mt-56" aria-labelledby="footer-heading">
         <h2 id="footer-heading" className="sr-only">
           Footer
@@ -343,8 +348,8 @@ export default function Landing() {
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
           <div className="xl:grid xl:grid-cols-3 xl:gap-8">
             <img
-              className="h-7"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+              className="h-24 lg:h-48"
+              src={logoWhite}
               alt="Company name"
             />
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
