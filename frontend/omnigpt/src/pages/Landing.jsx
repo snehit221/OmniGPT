@@ -109,7 +109,7 @@ export default function Landing() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
   const handleGetStarted = () => {
     if(localStorage.getItem("user")==null){
