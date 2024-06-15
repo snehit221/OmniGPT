@@ -1,24 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {auth} from '../config/firebase'
 import logo from '../assets/images/logos/logo-no-background.svg';
 import LogIN from '../assets/images/gpt-bg.jpg';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "../stylesheets/login.css"
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token")
+
+// Already logged in
+  useEffect(()=>{
+    if(token){
+      console.log(localStorage.getItem("user"))
+      navigate("/pricing")
+    }
+  },[])
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
    //  user credentials
-   toast.success("Login Successful!", { position: "top-right" });
-   setTimeout(() => setLoading(false),3000)
+   try {
+    const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+    const user = userCredential.user;
+    toast.success("User LogIn Successful!", { position: "top-right" });
+    localStorage.setItem("token", await user.getIdToken());
+    console.log("User ",user)
+    localStorage.setItem("user", user.email);
+    console.log(user.email)
+    setTimeout(() => {
+      navigate("/");
+    }, 2500);
+  } catch (error) {
+    toast.error("Invalid Credentials!", { position: "top-right" });
+    console.error("Firebase Error:", error);
+  } finally {
+    setLoading(false);
+    setFormData({ email: "", password: "" });
+  }
   };
 
   const handleGoogleLogin = async () => {
    // Google Authentication
+   const provider = new GoogleAuthProvider();
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      toast.success("User LogIn Successful!", { position: "top-right" });
+      localStorage.setItem("token", await user.getIdToken());
+      localStorage.setItem("user", user.email);
+      setTimeout(() => {
+        navigate("/");
+      }, 2500);
+    } catch (error) {
+      toast.error("Google Login Failed!", { position: "top-right" });
+      console.error("Firebase Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (event) => {

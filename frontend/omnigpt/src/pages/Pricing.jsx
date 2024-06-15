@@ -3,6 +3,7 @@ import logoWhite from "../assets/images/logos/logo-no-background.svg";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const navigation = [
   { name: "Home", route: "/" },
@@ -77,10 +78,10 @@ export default function Pricing() {
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
-            <a href="/" className="-m-1.5 p-1.5">
+            <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">OmniGPT</span>
               <img className="h-8 w-auto" src={logoWhite} alt="" />
-            </a>
+            </Link>
           </div>
           <div className="flex lg:hidden">
             <button
