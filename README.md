@@ -4,7 +4,8 @@
 
 Welcome to **OmniGPT**, your one-stop platform for accessing multiple GPT models in a single app. Whether you're crafting content, developing code, or conducting research, OmniGPT empowers you to compare and select the best responses for your needs. Experience unparalleled flexibility, enhance your work's quality, and save on costs with our affordable subscription plans. Discover the power of multiple GPTs at your fingertips. Sign up today!
 
-## Deployed Link
+## Deployed
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9e4915f9-eaea-45f9-b2b7-64fca4a26198/deploy-status)](https://app.netlify.com/sites/omnigpt-geeks/deploys)
 Access OmniGPT Here ⮕ [OmniGPT](https://omnigpt-geeks.netlify.app/)
 
 ## Everything You Need
