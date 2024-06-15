@@ -18,7 +18,7 @@ function Login() {
   useEffect(()=>{
     if(token){
       console.log(localStorage.getItem("user"))
-      navigate("/")
+      navigate("/pricing")
     }
   },[])
 
