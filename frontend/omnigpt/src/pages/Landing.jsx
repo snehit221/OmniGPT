@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import backgroundImage from '../assets/images/landing-background.png'
@@ -89,9 +89,18 @@ const footerNavigation = {
 
 export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
+  const [user,setUser] = useState(null)
   const navigate = useNavigate()
+  const token = localStorage.getItem("token")
 
+  useEffect(()=>{
+    if(token){
+      setUser(localStorage.getItem("user"))
+      console.log(localStorage.getItem("user"))
+    }
+    console.log("Token", token)
+    console.log("User",user)
+  },[])
   return (
     <div className="bg-white">
       {/* Header */}
@@ -125,9 +134,13 @@ export default function Landing() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            {!user ? 
             <Link to="/login" className="text-sm font-semibold leading-6 text-white">
               Log in <span aria-hidden="true">&rarr;</span>
             </Link>
+            : 
+            <div className='font-semibold text-white'> Welcome {user} </div>
+          }
           </div>
         </nav>
         <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
