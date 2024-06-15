@@ -100,6 +100,13 @@ export default function Landing() {
     console.log("Token", token)
     console.log("User",user)
   },[])
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
   return (
     <div className="bg-white">
       {/* Header */}
@@ -134,12 +141,20 @@ export default function Landing() {
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             {!user ? 
-            <Link to="/login" className="text-sm font-semibold leading-6 text-white">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </Link>
-            : 
-            <div className='font-semibold text-white'> Welcome {user} </div>
-          }
+              <Link to="/login" className="text-sm font-semibold leading-6 text-white">
+                Log in <span aria-hidden="true">&rarr;</span>
+              </Link>
+              : 
+              <>
+                <div className='font-semibold text-white'> Welcome {user} </div>
+                <button
+                  onClick={handleLogout}
+                  className="ml-4 px-3 py-1.5 rounded-md bg-red-500 text-white text-sm font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                >
+                  Logout
+                </button>
+              </>
+            }
           </div>
         </nav>
         <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
