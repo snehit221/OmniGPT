@@ -6,12 +6,12 @@ import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useNavigate } from "react-router-dom";
 
 function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 
 const navigation = [
   { name: "Home", route: "/" },
-  { name: "Register", route: "/register" },
   { name: "Pricing", route: "/pricing" },
 ];
 
@@ -76,6 +76,8 @@ export default function Pricing() {
   const [user,setUser] = useState(null)
   const token = localStorage.getItem("token")
 
+  const navigate = useNavigate();
+
   useEffect(()=>{
     if(token){
       setUser(localStorage.getItem("user"))
@@ -86,7 +88,7 @@ export default function Pricing() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
