@@ -26,7 +26,6 @@ const testimonial = {
 }
 
 const navigation = [
-  { name: 'Get Started', route: '/register' },
   { name: 'Pricing', route: '/pricing' },
 
 ]
