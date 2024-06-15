@@ -2,8 +2,12 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 import logoWhite from "../assets/images/logos/logo-no-background.svg";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, DialogPanel } from "@headlessui/react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+
+function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 
 const navigation = [
   { name: "Home", route: "/" },
@@ -69,6 +73,21 @@ const tiers = [
 
 export default function Pricing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user,setUser] = useState(null)
+  const token = localStorage.getItem("token")
+
+  useEffect(()=>{
+    if(token){
+      setUser(localStorage.getItem("user"))
+    }
+  },[])
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
 
   return (
     <div className="bg-gray-900 py-24 sm:py-32">
@@ -105,9 +124,53 @@ export default function Pricing() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-white">
-              Log out <span aria-hidden="true">&rarr;</span>
-            </a>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            {!user ? 
+            <Link to="/login" className="text-sm font-semibold leading-6 text-white">
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+            : 
+            <Menu as="div" className="relative inline-block text-left">
+                <div>
+                  <MenuButton className="inline-flex w-full justify-center text-white gap-x-1.5 bg-transparent rounded-md px-3 py-2 text-sm font-semibold shadow-sm">
+                    Welcome {user}
+                    <ChevronDownIcon
+                      className="-mr-1 h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </MenuButton>
+                  <Transition
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <MenuItems className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <MenuItem>
+                          {({ focus }) => (
+                            <p
+                              onClick={handleLogout}
+                              className={classNames(
+                                focus 
+                                  ? "  text-black"
+                                  : "text-black",
+                                " block px-4 py-2 text-sm text-right cursor-pointer"
+                              )}
+                            >
+                              Logout
+                            </p>
+                          )}
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Transition>
+                </div>
+              </Menu>
+          }
+          </div>
           </div>
         </nav>
         <Dialog

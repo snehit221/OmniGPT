@@ -14,6 +14,10 @@ import {
   LockClosedIcon,
   ServerIcon,
 } from '@heroicons/react/20/solid'
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+
+function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 
 const testimonial = {
   name: 'Jessica Brown',
@@ -107,6 +111,13 @@ export default function Landing() {
     setUser(null);
     navigate("/login");
   };
+  const handleGetStarted = () => {
+    if(localStorage.getItem("user")==null){
+      navigate("/register")
+    }else{
+      navigate("/pricing")
+    }
+  }
   return (
     <div className="bg-white">
       {/* Header */}
@@ -145,15 +156,45 @@ export default function Landing() {
                 Log in <span aria-hidden="true">&rarr;</span>
               </Link>
               : 
-              <>
-                <div className='font-semibold text-white'> Welcome {user} </div>
-                <button
-                  onClick={handleLogout}
-                  className="ml-4 px-3 py-1.5 rounded-md bg-red-500 text-white text-sm font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-                >
-                  Logout
-                </button>
-              </>
+              <Menu as="div" className="relative inline-block text-left">
+                <div>
+                  <MenuButton className="inline-flex w-full justify-center text-white gap-x-1.5 bg-transparent rounded-md px-3 py-2 text-sm font-semibold shadow-sm">
+                    Welcome {user}
+                    <ChevronDownIcon
+                      className="-mr-1 h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </MenuButton>
+                  <Transition
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <MenuItems className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <MenuItem>
+                          {({ focus }) => (
+                            <p
+                              onClick={handleLogout}
+                              className={classNames(
+                                focus 
+                                  ? "  text-black"
+                                  : "text-black",
+                                " block px-4 py-2 text-sm text-right cursor-pointer"
+                              )}
+                            >
+                              Logout
+                            </p>
+                          )}
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Transition>
+                </div>
+              </Menu>
             }
           </div>
         </nav>
@@ -232,7 +273,7 @@ export default function Landing() {
                 
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <a
-                    onClick={() => navigate('/register')}
+                    onClick={handleGetStarted}
                     className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 hover:cursor-pointer"
                   >
                     Get started

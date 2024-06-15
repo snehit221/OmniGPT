@@ -18,7 +18,7 @@ function Login() {
   useEffect(()=>{
     if(token){
       console.log(localStorage.getItem("user"))
-      navigate("/pricing")
+      navigate("/pricing",{replace:true})
     }
   },[])
 
@@ -75,12 +75,12 @@ function Login() {
   return (
     <div className="flex h-screen">
       <div className="hidden md:block w-1/2 bg-cover bg-right" style={{ backgroundImage: `url(${LogIN})` }}></div>
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white p-8">
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-primarybg p-8">
         <div className="mb-4">
           <img src={logo} alt="Logo" className="w-40 h-auto" />
         </div>
         
-        <h1 className="text-2xl font-italic mb-6">Log In</h1>
+        <h1 className="text-2xl  font-italic text-white mb-6">Log In</h1>
         <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-500 mb-4">{"Don't have an account? Sign Up"}</Link>
         <form onSubmit={handleSubmit} className="w-full max-w-sm">
           <div className="mb-4">
@@ -119,8 +119,8 @@ function Login() {
                 >
                   <div className="w-full border-t border-gray-200" />
                 </div>
-                <div className="relative flex justify-center text-sm font-medium leading-6">
-                  <span className="bg-white px-6 text-gray-900">
+                <div className="relative flex justify-center text-sm font-medium leading-6 mb-6">
+                  <span className=" px-6 text-white bg-primarybg">
                     Or continue with
                   </span>
                 </div>
@@ -158,7 +158,7 @@ function Login() {
                   </span>
             {loading ? <div className="loader"></div> : ""}
           </button>
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex justify-center">
             <Link to="/send-forgot-password-email" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
           </div>
         </form>

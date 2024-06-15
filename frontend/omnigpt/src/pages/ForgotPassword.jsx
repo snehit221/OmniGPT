@@ -33,11 +33,11 @@ function ForgotPassword() {
 
   return (
     <div className="flex h-screen">
-      <div className="w-full flex flex-col justify-center items-center bg-white p-8">
+      <div className="w-full flex flex-col justify-center items-center bg-primarybg p-8">
         <div className="mb-4">
           <img src={logo} alt="Logo" className="w-40 h-auto" />
         </div>
-        <h1 className="text-2xl font-italic mb-6">Forgot Password</h1>
+        <h1 className="text-2xl text-white font-italic mb-6">Forgot Password</h1>
         <form onSubmit={handleSubmit} className="w-full max-w-sm">
           <div className="mb-4">
             <input
