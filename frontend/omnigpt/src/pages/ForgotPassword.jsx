@@ -1,4 +1,4 @@
-// ForgotPassword.jsx
+
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import logo from '../assets/images/logos/logo-no-background.svg';
@@ -6,6 +6,7 @@ import "../stylesheets/login.css";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");

@@ -12,6 +12,7 @@ function App() {
             {/* Accessible Routes */}
             <Route path='/' element={<Landing />}></Route>
             <Route path='/register' element={<Register />}></Route>
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path='/pricing' element={<Pricing />}></Route>
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
             <Route path='/login' element={<Login />} />
