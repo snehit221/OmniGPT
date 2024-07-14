@@ -16,6 +16,7 @@ import {
 } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import ChatComponent from '../components/ChatComponent'
 
 function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 
@@ -391,7 +392,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-
+        <ChatComponent />
       </main>
 
       {/* Footer */}
