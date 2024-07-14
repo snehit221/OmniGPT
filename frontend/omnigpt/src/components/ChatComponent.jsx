@@ -1,24 +1,11 @@
 import React, { useState } from 'react';
 import ChatWindow from './ChatWindow';
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_KEY); 
+import {getGeminiResponse } from '../util/gptUtil';
 
 const ChatComponent = () => {
   const [userMessage, setUserMessage] = useState('');
   const [geminiMessages, setGeminiMessages] = useState([]);
   const [chatgptMessages, setChatgptMessages] = useState([]);
-
-  const getGeminiResponse = async (message) => {
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const result = await model.generateContent(message);
-      const response = result.response;
-      return response.text();
-    } catch (error) {
-      return "Error generating response.";
-    }
-  };
 
   const handleSendMessage = async () => {
     if (userMessage.trim()) {
@@ -30,7 +17,6 @@ const ChatComponent = () => {
       setTimeout(async () => {
         const botResponse = `${userMessage}`;
         const geminiResponse = await getGeminiResponse(userMessage);
-        console.log(geminiResponse);
         setChatgptMessages(prevMessages => [...prevMessages, { text: botResponse, isUser: false }]);
         setGeminiMessages(prevMessages => [...prevMessages, { text: geminiResponse, isUser: false }]);
       }, 1000);
