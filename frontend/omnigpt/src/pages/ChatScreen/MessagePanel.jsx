@@ -7,7 +7,7 @@ const messagesTemp = [
   {
     id: 1,
     sender: "user",
-    message: "How to integrate APIs in ReactJS?",
+    message: "How to integrate APIs in ReactJS jhdbqw dnqk diudj iduqd iuhqdq lqiuhdq  iquhdq liundqd ??",
   },
   {
     id: 2,

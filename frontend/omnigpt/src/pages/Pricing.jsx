@@ -13,6 +13,7 @@ function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 const navigation = [
   { name: "Home", route: "/" },
   { name: "Pricing", route: "/pricing" },
+
 ];
 
 
@@ -81,6 +82,9 @@ export default function Pricing() {
   useEffect(()=>{
     if(token){
       setUser(localStorage.getItem("user"))
+      if (navigation.length === 2) {
+        navigation.push({ name: "Chat", route: "/chat" })
+      }
     }
   },[])
 

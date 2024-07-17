@@ -21,7 +21,7 @@ function GPTMessageBubble({ gptResponse }) {
 
 
   return (
-    <div className="w-full flex my-3  gap-3">
+    <div className="w-full flex flex-col md:flex-row my-3  gap-3">
       <div className="flex flex-col flex-1 rounded-lg overflow-hidden">
         <div className="flex bg-gray-900 justify-between p-3">
           <div className=" text-white">{gptResponse.gpt1}</div>
