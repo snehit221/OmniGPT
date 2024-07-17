@@ -8,6 +8,7 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from "react-router-dom";
 
+
 function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 
 const navigation = [
@@ -21,26 +22,16 @@ const navigation = [
 const tiers = [
   {
     name: "Monthly",
-
     id: "tier-monthly",
-
     href: "#",
-
-    price: "$50",
-
-
+    price: "19.99",
     features: ["Single Device", "upto 500 Messages", "Share Chat"],
   },
-
   {
     name: "Bi-Yearly",
-
     id: "tier-bi-yearly",
-
     href: "#",
-
-    price: "$270",
-
+    price: "99.99",
     features: [
       "Multiple Devices upto 2",
       "Upto 5000 Messages",
@@ -49,17 +40,11 @@ const tiers = [
       "Image and Document Upload",
     ],
   },
-
   {
     name: "Yearly",
-
     id: "tier-yearly",
-
     href: "#",
-
-    price: "$500",
-
-
+    price: "179.99",
     features: [
       "Multiple Devices upt 4",
       "Unlimited Messages",
@@ -85,6 +70,7 @@ export default function Pricing() {
       if (navigation.length === 2) {
         navigation.push({ name: "Chat", route: "/chat" })
       }
+      console.log(localStorage.getItem("user"))
     }
   },[])
 
@@ -93,6 +79,41 @@ export default function Pricing() {
     localStorage.removeItem("user");
     setUser(null);
     navigate("/");
+  };
+
+
+  const handleBuyPlan = (plan) => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      
+      // Proceed with the purchase process
+      console.log(`User is authenticated. Proceed with purchasing tier: ${plan}`);
+
+      // Implement your purchase logic here
+      // fetch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/create-subscription-checkout-session`, {
+        fetch(`http://localhost:5000/create-subscription-checkout-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId: user, plan: plan })
+      })
+      .then((res) => {
+        if (res.ok) return res.json();
+        console.error("Error creating checkout session:", res.statusText);
+      })
+      .then(({ session }) => {
+       
+        console.log("Session --------------> ",session)
+        localStorage.setItem("sessionId",session.id)
+        window.location = session.url;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    }
   };
 
   return (
@@ -271,13 +292,13 @@ export default function Pricing() {
                 </span> */}
               </p>
 
-              <a
-                href={tier.href}
+              <button
+                onClick={() => handleBuyPlan(Number(tier.price))}
                 aria-describedby={tier.id}
                 className="bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500 mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 Buy plan
-              </a>
+              </button>
 
               <ul
                 role="list"
