@@ -104,7 +104,7 @@ export default function Landing() {
     }
     console.log("Token", token)
     console.log("User",user)
-  },[])
+      },[])
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -176,6 +176,21 @@ export default function Landing() {
                   >
                     <MenuItems className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1">
+                      <MenuItem>
+                    {({ focus }) => (
+                      <Link
+                        to="/profile"
+                        className={classNames(
+                          focus 
+                          ? "  text-black"
+                          : "text-black",
+                        " block px-4 py-2 text-sm text-right cursor-pointer"
+                      )}
+                      >
+                        Profile
+                      </Link>
+                    )}
+                  </MenuItem>
                         <MenuItem>
                           {({ focus }) => (
                             <p

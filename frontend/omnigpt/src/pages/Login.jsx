@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import {auth} from '../config/firebase'
+import {auth, db } from '../config/firebase'
 import logo from '../assets/images/logos/logo-no-background.svg';
 import LogIN from '../assets/images/gpt-bg.jpg';
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "../stylesheets/login.css"
+import { setDoc, doc } from "firebase/firestore";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -53,6 +54,14 @@ function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+
+      // Store or update user data in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        name: user.displayName,
+        email: user.email,
+        profileImageUrl: user.photoURL, // Save the profile picture URL
+      }, { merge: true });  
+        
       toast.success("User LogIn Successful!", { position: "top-right" });
       localStorage.setItem("token", await user.getIdToken());
       localStorage.setItem("user", user.email);
