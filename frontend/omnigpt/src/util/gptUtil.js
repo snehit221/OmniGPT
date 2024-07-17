@@ -12,3 +12,5 @@ export const getGeminiResponse = async (message) => {
     return "Error generating response.";
   }
 };
+
+

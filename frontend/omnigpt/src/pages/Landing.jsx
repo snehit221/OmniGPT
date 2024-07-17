@@ -17,6 +17,7 @@ import {
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import ChatComponent from '../components/ChatComponent'
+import llama from '../assets/images/meta.png';
 
 function classNames(...classes) {return classes.filter(Boolean).join(' ')}
 
@@ -293,7 +294,7 @@ export default function Landing() {
               />
               <img
                 className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-                src={chatgpt}
+                src={llama}
                 alt="Reform"
                 width={158}
                 height={48}

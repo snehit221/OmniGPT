@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import ChatWindow from './ChatWindow';
-import {getGeminiResponse } from '../util/gptUtil';
+import { getGeminiResponse } from '../util/gptUtil';
+import { getLlamaResponse } from '../util/getLlamaResponse';
 
 const ChatComponent = () => {
   const [userMessage, setUserMessage] = useState('');
   const [geminiMessages, setGeminiMessages] = useState([]);
-  const [chatgptMessages, setChatgptMessages] = useState([]);
+  const [llamaMessages, setLlamaMessages] = useState([]);
 
   const handleSendMessage = async () => {
     if (userMessage.trim()) {
       const newGeminiMessages = [...geminiMessages, { text: userMessage, isUser: true }];
       setGeminiMessages(newGeminiMessages);
-      const newChatGPTMessages = [...chatgptMessages, { text: userMessage, isUser: true }];
-      setChatgptMessages(newChatGPTMessages);
+      const newLlamaMessages = [...llamaMessages, { text: userMessage, isUser: true }];
+      setLlamaMessages(newLlamaMessages);
       setUserMessage('');
       setTimeout(async () => {
-        const botResponse = `${userMessage}`;
         const geminiResponse = await getGeminiResponse(userMessage);
-        setChatgptMessages(prevMessages => [...prevMessages, { text: botResponse, isUser: false }]);
+        const llamaResponse = await getLlamaResponse(userMessage);
+        setLlamaMessages(prevMessages => [...prevMessages, { text: llamaResponse, isUser: false }]);
         setGeminiMessages(prevMessages => [...prevMessages, { text: geminiResponse, isUser: false }]);
       }, 1000);
     }
@@ -27,7 +28,7 @@ const ChatComponent = () => {
     <div className="flex flex-col mt-20 p-10 items-center min-h-screen">
       <div className="flex flex-row w-full max-w-6xl space-x-6 mb-4">
         <ChatWindow title="Gemini" messages={geminiMessages} />
-        <ChatWindow title="ChatGPT" messages={chatgptMessages} />
+        <ChatWindow title="Llama" messages={llamaMessages} />
       </div>
       <div className="flex w-full max-w-6xl space-x-4 mb-4">
         <input
