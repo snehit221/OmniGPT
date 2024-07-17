@@ -4,6 +4,8 @@ import Register from './pages/Register';
 import Pricing from './pages/Pricing';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
+import PrivateRoute from './components/PrivateRoute';
+import ChatScreen from './pages/ChatScreen/ChatScreen';
 
 
 function App() {
@@ -17,6 +19,11 @@ function App() {
             <Route path='/pricing' element={<Pricing />}></Route>
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
             <Route path='/login' element={<Login />} />
+
+            <Route element={<PrivateRoute />}>
+              <Route path="/chat" element={<ChatScreen />} />
+            </Route>
+
           </Routes>
       </Router>
     )
