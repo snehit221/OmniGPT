@@ -1,10 +1,11 @@
 import { TypeAnimation } from "react-type-animation";
 import gemini from '../assets/images/gemini.png';
 import chatgpt from '../assets/images/chatgpt.png';
+import llama from '../assets/images/meta.png';
 
 const titleImages = {
   Gemini: gemini,
-  ChatGPT: chatgpt,
+  Llama: llama,
 };
 
 const ChatWindow = ({ title, messages }) => {

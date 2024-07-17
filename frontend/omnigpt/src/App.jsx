@@ -5,6 +5,7 @@ import Pricing from './pages/Pricing';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 
+
 function App() {
     return (
       <Router>
