@@ -8,10 +8,12 @@ import ForgotPassword from './pages/ForgotPassword';
 import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
-
+import Navbar from './components/Navbar';
+ 
 function App() {
     return (
       <Router>
+         <Navbar />
           <Routes>
             {/* Accessible Routes */}
             <Route path='/' element={<Landing />}></Route>
@@ -22,14 +24,15 @@ function App() {
             <Route path='/success' element={<Success />}></Route>
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
             <Route path='/login' element={<Login />} />
-
+ 
             <Route element={<PrivateRoute />}>
               <Route path="/chat" element={<ChatScreen />} />
             </Route>
-
+ 
           </Routes>
       </Router>
     )
 }
-
+ 
 export default App
+ 
