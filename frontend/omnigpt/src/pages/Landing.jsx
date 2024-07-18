@@ -16,7 +16,6 @@ import {
 } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import ChatComponent from '../components/ChatComponent'
 import llama from '../assets/images/meta.png';
 import Navbar from '../components/Navbar'
  
@@ -275,7 +274,6 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <ChatComponent />
       </main>
  
       {/* Footer */}

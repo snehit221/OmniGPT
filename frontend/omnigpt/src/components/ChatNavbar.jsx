@@ -16,7 +16,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
+export default function ChatNavbar({toggleChatList}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(null);
@@ -71,12 +71,32 @@ export default function Navbar() {
         className="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
       >
-        <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">OmniGPT</span>
-            <img className="h-8 w-auto" src={logoWhite} alt="Logo" />
-          </Link>
-        </div>
+        <div className=" md:flex lg:flex-1">
+            <div className=" hidden lg:visible">
+            <Link to="/" className="-m-1.5 p-1.5">
+              <span className="sr-only">OmniGPT</span>
+              <img className="h-8 w-auto" src={logoWhite} alt="" />
+            </Link>
+            </div>
+            <button className={` md:hidden text-gray-400  rounded-lg`} onClick={toggleChatList}>
+            {/* Burger Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+          </div>
+        
         <div className="flex lg:hidden">
           <button
             type="button"
