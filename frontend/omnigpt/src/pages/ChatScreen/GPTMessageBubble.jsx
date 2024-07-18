@@ -13,7 +13,6 @@ function GPTMessageBubble({ gptResponse }) {
         console.log("Inside handle copy");
         navigator.clipboard.writeText(copyMesage).then(() => {
           console.log("Text copied to clipboard:", copyMesage);
-          toast.success("Copied to clipboard");
         }).catch((error) => {
           console.error("Failed to copy text:", error);
         });
