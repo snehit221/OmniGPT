@@ -5,6 +5,12 @@ const [monthly, biyearly, yearly] = ['price_1PdfgZ01hABKBF0gdRIMJBFp', 'price_1P
 
 const stripe = require("stripe")('sk_test_51Oz5el01hABKBF0gIItdBBUC4yZh9gP4l8AqRSzWmKqtEjJ1iK7fnbHLmucEVBlUYUkaXe1Oiy2YpaPjcFFgqLlJ00hRD7Wb1U')
 
+const admin = require('firebase-admin');
+const serviceAccount = require('../omnigpt-bf0f1-firebase-adminsdk-63i1b-d636f53b1d.json')
+admin.initializeApp({credential: admin.credential.cert(serviceAccount)});
+ 
+const db = admin.firestore();
+
 // Function to create a new Stripe checkout session for subscription
 const stripeSession = async(plan) => {
     try {
@@ -25,6 +31,17 @@ const stripeSession = async(plan) => {
         return e;
     }
 };
+
+async function updateSubscriptionDetails(userId, subscriptionDetails) {
+  try {
+    await db.collection('users').doc(userId).set({
+      subscriptionDetails: subscriptionDetails
+    }, { merge: true });
+    console.log('Subscription details updated successfully.');
+  } catch (error) {
+    console.error('Error updating subscription details: ', error);
+  }
+}
 
 // Controller function to handle the creation of a new subscription
 const createSubscription = async (req, res) => {
@@ -77,8 +94,17 @@ const handlePaymentSuccess = async (req, res) => {
             const durationInDays = moment.duration(durationInSeconds, 'seconds').asDays();
            
             // Create Subscription and Update user
+            const subscriptionDetails = {
+              planId: planId,
+              planType: planType,
+              planStartDate: startDate,
+              planEndDate: endDate,
+              planDuration: durationInDays,
+              userId: userId
+          };
             
             try {
+              await updateSubscriptionDetails(userId, subscriptionDetails);
 
                 // const savedSubscription = await subscriptionMo.save();
                 // console.log("Subscription saved:", savedSubscription);
