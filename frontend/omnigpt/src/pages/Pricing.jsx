@@ -80,7 +80,7 @@ export default function Pricing() {
 
   useEffect(()=>{
     if(token){
-      setUser(localStorage.getItem("user"))
+      setUser(localStorage.getItem("username")) // setting username
     }
   },[])
 
