@@ -96,11 +96,13 @@ export default function Landing() {
   const [user,setUser] = useState(null)
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
- 
+
   useEffect(()=>{
     if(token){
-      setUser(localStorage.getItem("user"))
-      console.log(localStorage.getItem("user"))
+      console.log("username in localstorage: ", localStorage.getItem("username"))
+      console.log("user: ", localStorage.getItem("user")) 
+      setUser(localStorage.getItem("username")) // setting username
+      console.log("this is the username set", setUser)
     }
     console.log("Token", token)
     console.log("User",user)
@@ -109,6 +111,7 @@ export default function Landing() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("username");
     setUser(null);
     navigate("/");
   };
