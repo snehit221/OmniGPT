@@ -32,9 +32,7 @@ function Login() {
     const user = userCredential.user;
     toast.success("User LogIn Successful!", { position: "top-right" });
     localStorage.setItem("token", await user.getIdToken());
-    console.log("User ",user)
     localStorage.setItem("user", user.email);
-    console.log(user.email)
     setTimeout(() => {
       navigate("/");
     }, 2500);

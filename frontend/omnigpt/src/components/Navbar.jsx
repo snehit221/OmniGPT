@@ -1,63 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Dialog, DialogPanel, Transition } from '@headlessui/react';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import logoWhite from '../assets/images/logos/logo-no-background.svg';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
- 
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Dialog, DialogPanel, Transition } from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/20/solid";
+import logoWhite from "../assets/images/logos/logo-no-background.svg";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { unstable_batchedUpdates } from "react-dom";
+
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
- 
-export default function Navbar() {
+
+export default function Navbar(subscribed) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [isSubscribed, setIsSubscribed] = useState(null);
+  const [isSubscribed, setIsSubscribed] = useState(subscribed);
   const navigate = useNavigate();
-  const [token,setToken] = useState(localStorage.getItem('token'));
- 
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const auth = getAuth();
+  const db = getFirestore();
+
   useEffect(() => {
     const fetchUserData = async () => {
-      const auth = getAuth();
-      const db = getFirestore();
- 
+      console.log("Inside fetch user data");
+
       onAuthStateChanged(auth, async (currentUser) => {
         if (currentUser) {
-          const userRef = doc(db, 'users', currentUser.uid);
+          const userRef = doc(db, "users", currentUser.uid);
           const userDoc = await getDoc(userRef);
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setUser(userData.name);
-            if (userData.subscriptionDetails) {
-              setIsSubscribed(true);
-            } else {
-              setIsSubscribed(false);
-            }
+            unstable_batchedUpdates(() => {
+              setUser(userData.name);
+              setIsSubscribed(!!userData.subscriptionDetails);
+            });
           }
+        } else {
+          unstable_batchedUpdates(() => {
+            setUser(null);
+            setIsSubscribed(false);
+          });
         }
       });
     };
- 
+
     if (token) {
       fetchUserData();
     }
-  }, [token]);
- 
+  }, []);
+
   const handleLogout = () => {
     const auth = getAuth();
     auth.signOut().then(() => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setUser(null);
-      navigate('/');
+      setIsSubscribed(false);
+      navigate("/");
     });
   };
- 
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
-      <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <nav
+        className="flex items-center justify-between p-6 lg:px-8"
+        aria-label="Global"
+      >
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">OmniGPT</span>
@@ -99,7 +112,10 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {!user ? (
-            <Link to="/login" className="text-sm font-semibold leading-6 text-white">
+            <Link
+              to="/login"
+              className="text-sm font-semibold leading-6 text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </Link>
           ) : (
@@ -121,16 +137,16 @@ export default function Navbar() {
                   leaveTo="transform opacity-0 scale-95"
                 >
                   <MenuItems className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
+                    <div className="py-1">
                       <MenuItem>
- 
-                          <Link to="/profile"
-                            className={classNames(
-                              'block px-4 py-2 text-sm text-right cursor-pointer'
-                            )}
-                          >
-                            Profile
-                          </Link>
+                        <Link
+                          to="/profile"
+                          className={classNames(
+                            "block px-4 py-2 text-sm text-right cursor-pointer"
+                          )}
+                        >
+                          Profile
+                        </Link>
                       </MenuItem>
                     </div>
                     <div className="py-1">
@@ -139,8 +155,8 @@ export default function Navbar() {
                           <p
                             onClick={handleLogout}
                             className={classNames(
-                              active ? 'text-black' : 'text-black',
-                              'block px-4 py-2 text-sm text-right cursor-pointer'
+                              active ? "text-black" : "text-black",
+                              "block px-4 py-2 text-sm text-right cursor-pointer"
                             )}
                           >
                             Logout
@@ -155,7 +171,11 @@ export default function Navbar() {
           )}
         </div>
       </nav>
-      <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+      <Dialog
+        className="lg:hidden"
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+      >
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
@@ -198,12 +218,64 @@ export default function Navbar() {
                 )}
               </div>
               <div className="py-6">
-                <Link
-                  to="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+                {!user ? (
+                  <Link
+                    to="/login"
+                    className="text-sm font-semibold leading-6 text-black"
+                  >
+                    Log in <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                ) : (
+                  <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center text-black gap-x-1.5 bg-transparent rounded-md py-2 text-sm font-semibold">
+                        Welcome {user}
+                        <ChevronDownIcon
+                          className="-mr-1 h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                      <Transition
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <MenuItems className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <div className="py-1">
+                            <MenuItem>
+                              <Link
+                                to="/profile"
+                                className={classNames(
+                                  "block px-4 py-2 text-sm text-right cursor-pointer"
+                                )}
+                              >
+                                Profile
+                              </Link>
+                            </MenuItem>
+                          </div>
+                          <div className="py-1">
+                            <MenuItem>
+                              {({ active }) => (
+                                <p
+                                  onClick={handleLogout}
+                                  className={classNames(
+                                    active ? "text-black" : "text-black",
+                                    "block px-4 py-2 text-sm text-right cursor-pointer"
+                                  )}
+                                >
+                                  Logout
+                                </p>
+                              )}
+                            </MenuItem>
+                          </div>
+                        </MenuItems>
+                      </Transition>
+                    </div>
+                  </Menu>
+                )}
               </div>
             </div>
           </div>
@@ -212,4 +284,3 @@ export default function Navbar() {
     </header>
   );
 }
- 

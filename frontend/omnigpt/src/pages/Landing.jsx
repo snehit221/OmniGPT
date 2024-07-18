@@ -18,6 +18,7 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import ChatComponent from '../components/ChatComponent'
 import llama from '../assets/images/meta.png';
+import Navbar from '../components/Navbar'
  
 function classNames(...classes) {return classes.filter(Boolean).join(' ')}
  
@@ -26,11 +27,6 @@ const testimonial = {
   role: 'Software Developer',
   content: "OmniGPT has revolutionized my development workflow. Being able to compare responses from multiple GPT models in real-time means I get the best coding solutions quickly and efficiently. The platform's seamless integration into my projects has significantly boosted my productivity and the quality of my code."
 }
- 
-const navigation = [
-  { name: 'Pricing', route: '/pricing' },
- 
-]
 const features = [
   {
     name: 'Multi-GPT Access',
@@ -121,6 +117,7 @@ export default function Landing() {
   }
   return (
     <div className="bg-white">
+      <Navbar />
       <main>
         {/* Hero section */}
         <div className="relative min-h-screen isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20">

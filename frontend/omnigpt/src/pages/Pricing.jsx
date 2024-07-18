@@ -2,6 +2,8 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
+import Navbar from "../components/Navbar";
+
  
 const tiers = [
   {
@@ -51,7 +53,7 @@ export default function Pricing() {
   useEffect(()=>{
     if(token){
       console.log(auth.currentUser)
-      setUser(localStorage.getItem("user"))
+    setUser(localStorage.getItem("user"))
     }
    
   },[])
@@ -63,7 +65,7 @@ export default function Pricing() {
     } else {
       
       console.log(`User is authenticated. Proceed with purchasing tier: ${plan}`);
-        fetch(`http://localhost:5000/create-subscription-checkout-session`, {
+        fetch(`https://subscriptionstripe.onrender.com/create-subscription-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,6 +90,7 @@ export default function Pricing() {
  
   return (
     <div className="bg-gray-900 py-24 sm:py-32">
+      <Navbar />
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
  

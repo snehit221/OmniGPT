@@ -18,7 +18,7 @@ const Success = () => {
       const handlePaymentSuccess = () => {
         const token = localStorage.getItem('token');
         console.log('Token ------- ', token);
-        fetch(`http://localhost:5000/payment-success`, {
+        fetch(`https://subscriptionstripe.onrender.com/payment-success`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const Success = () => {
       };
 
   return (
-    <div className="bg-gray-900 py-24 sm:py-32">
+    <div className="bg-gray-900 min-h-screen py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
           Payment Successful!
