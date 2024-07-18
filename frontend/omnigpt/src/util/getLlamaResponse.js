@@ -3,7 +3,7 @@ import axios from "axios";
 export const getLlamaResponse = async (inputText) => {
   try {
     const response = await axios.post(
-      "https://nr5w39czhh.execute-api.us-east-1.amazonaws.com/prod/llama",
+      import.meta.env.VITE_LLAMA_API_ENDPOINT,
       {
         prompt: inputText,
       },
@@ -17,10 +17,11 @@ export const getLlamaResponse = async (inputText) => {
     if (response.status === 200) {
       return response.data;
     } else {
-      throw new Error(response.data.error || "Error generating response.");
+      console.log("Llama Resonse :"+response)
+      return "Free tier limit reached"
     }
   } catch (error) {
     console.error(error);
-    return "Error generating response.";
+    return "Free tier limit reached";
   }
 };

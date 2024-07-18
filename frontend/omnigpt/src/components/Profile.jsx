@@ -91,19 +91,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center">
+    <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center py-24">
       {/* Full-page grey background */}
-      <div className="absolute top-0 left-0 m-4">
-        {/* Positioning for the logo */}
-        <Link to="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">OmniGPT</span>
-              <img
-                className="h-8 w-auto"
-                src={logoWhite}
-                alt=""
-              />
-            </Link>
-          </div>
       <div className="py-8 sm:py-12">  {/* Reduced padding */}
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">

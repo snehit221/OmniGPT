@@ -21,7 +21,8 @@
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
     "react-type-animation": "^3.2.0",
-    "replicate": "^0.31.1"
+    "replicate": "^0.31.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
