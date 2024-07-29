@@ -16,6 +16,7 @@ const Success = () => {
       }, []);
 
       const handlePaymentSuccess = () => {
+        console.log("Payment success", sessionId);
         const token = localStorage.getItem('token');
         console.log('Token ------- ', token);
         fetch(`https://subscriptionstripe.onrender.com/payment-success`, {
