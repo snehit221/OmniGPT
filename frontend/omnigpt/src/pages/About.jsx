@@ -56,41 +56,38 @@ const values = [
         name: 'Heramb Kulkarni',
         role: 'Co-Founder / Data Engineer',
         imageUrl: 'https://firebasestorage.googleapis.com/v0/b/webt3-8766f.appspot.com/o/OmniGPT%2FHeramb.jpg?alt=media&token=b9756313-3ffd-4c9e-b7e3-c9b112d462d4',
-        location: 'Toronto, Canada',
-      },
+        location: 'Vancouver, BC, Canada',
+    },
       {
         name: 'Parth Karkhanis',
         role: 'Co-Founder / Data Engineer',
         imageUrl: 'https://firebasestorage.googleapis.com/v0/b/webt3-8766f.appspot.com/o/OmniGPT%2FParth.jpg?alt=media&token=a1b8391e-2b95-4fba-ae66-c294ac4f9e6a',
-        location: 'Toronto, Canada',
-      },
+        location: 'Halifax, NS, Canada',
+    },
       {
         name: 'Shubham Pawar',
         role: 'Co-Founder / Software Developer',
         imageUrl: 'https://firebasestorage.googleapis.com/v0/b/webt3-8766f.appspot.com/o/OmniGPT%2FShubham.jpg?alt=media&token=7bc369aa-d610-4e9d-900c-955dd53e35de',
-        location: 'Toronto, Canada',
-      },
+        location: 'Halifax, NS, Canada',
+    },
       {
         name: 'Ashish Nagpal',
         role: 'Co-Founder / DevOps Engineer',
-        imageUrl:
-          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/webt3-8766f.appspot.com/o/OmniGPT%2FAshish.jpg?alt=media&token=c24bbf6a-3ebf-4469-b721-e3cdb5012c9f',
         location: 'Toronto, Canada',
       },
       {
         name: 'Shreya Kapoor',
         role: 'Co-Founder / Developer',
-        imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/webt3-8766f.appspot.com/o/OmniGPT%2FShreya.jpg?alt=media&token=a5f0375c-1907-4b98-97e0-c8801cd8e595',
         location: 'Toronto, Canada',
       },
       {
         name: 'Snehit Roda',
         role: 'Co-Founder / Data Engineer',
-        imageUrl:
-          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-        location: 'Toronto, Canada',
-      },
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/webt3-8766f.appspot.com/o/OmniGPT%2Fimage.jpg?alt=media&token=814ce12d-b3d6-4356-a622-3fb7fa0faff6',
+        location: 'Halifax, NS, Canada',
+        },
     // More people...
   ]
 
