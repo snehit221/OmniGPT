@@ -8,6 +8,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
+import About from './pages/About';
  
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
             <Route path='/success' element={<Success />}></Route>
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/about' element={<About />} />
  
             <Route element={<PrivateRoute />}>
               <Route path="/chat" element={<ChatScreen />} />
