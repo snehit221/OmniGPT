@@ -32,6 +32,7 @@ function ChatScreen() {
   const token = localStorage.getItem("token");
   const [isChatListVisible, setIsChatListVisible] = useState(false);
   const [chatId, setChatId] = useState(null);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const toggleChatList = () => {
     setIsChatListVisible(!isChatListVisible);
@@ -63,7 +64,7 @@ function ChatScreen() {
             isChatListVisible ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0`}
         >
-          <ChatList chatId={chatId} setChatId={setChatId}/>
+          <ChatList chatId={chatId} setChatId={setChatId} setIsFirstLoad={setIsFirstLoad}/>
           <button
             className="md:hidden absolute top-4 right-4 text-white"
             onClick={toggleChatList}
@@ -86,7 +87,7 @@ function ChatScreen() {
           </button>
         </div>
         <div className="flex flex-1">
-          <MessagePanel chatId={chatId} setChatId={setChatId}/>
+          <MessagePanel chatId={chatId} setChatId={setChatId} isFirstLoad={isFirstLoad} setIsFirstLoad={setIsFirstLoad}/>
         </div>
       </main>
 

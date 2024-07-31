@@ -16,11 +16,11 @@ import {
 } from "firebase/firestore";
 import { getLlamaResponse } from "../../util/getLlamaResponse";
 import { getGeminiResponse } from "../../util/gptUtil";
-import { PDFExport } from "@progress/kendo-react-pdf";
+// import { PDFExport } from "@progress/kendo-react-pdf";
 import pdfLogo from "../../assets/images/pdf.svg";
 import { exportFile } from "../../util/importExportLib";
 
-function MessagePanel({ chatId, setChatId }) {
+function MessagePanel({ chatId, setChatId, isFirstLoad ,setIsFirstLoad}) {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -90,6 +90,7 @@ function MessagePanel({ chatId, setChatId }) {
   };
 
   const handleSendMessage = async () => {
+    setIsFirstLoad(false)
     const userId = localStorage.getItem("user");
     if (isFormSubmitted) return;
 
@@ -170,7 +171,8 @@ function MessagePanel({ chatId, setChatId }) {
     }
 
     //
-    const message1 = await getLlamaResponse(userInput);
+    // const message1 = await getLlamaResponse(userInput);
+    const message1 = await getGeminiResponse(userInput);
     const message2 = await getGeminiResponse(userInput);
     if (firebaseId != null) {
       addBotMessage(
@@ -316,23 +318,25 @@ function MessagePanel({ chatId, setChatId }) {
         className="h-full w-full bg-gray-800 flex flex-col p-4 overflow-hidden"
       >
         <div className="flex-1 flex-col overflow-y-auto p-3">
-          <PDFExport
+          {/* <PDFExport
             ref={pdfExportComponent}
             paperSize="auto"
             margin={40}
             fileName={`chat-${Date.now()}.pdf`}
             author="OmniGPT"
           >
-            {messages.map((message) => (
+           
+          </PDFExport> */}
+          {messages.map((message,index) => (
+             console.log(message,index,messages.length-1),
               <div key={message.id}>
                 {message.sender === "user" ? (
-                  <UserBubble message={message.message} />
+                  <UserBubble message={message.message}  />
                 ) : (
-                  <GPTMessageBubble gptResponse={message} />
+                  <GPTMessageBubble gptResponse={message} isFirstLoad={isFirstLoad} isLastMessage={index===messages.length-1}  />
                 )}
               </div>
             ))}
-          </PDFExport>
         </div>
         <div className=" w-full flex gap-2">
           <input

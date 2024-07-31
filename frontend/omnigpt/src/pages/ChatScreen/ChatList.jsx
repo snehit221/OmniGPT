@@ -12,7 +12,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-function ChatList({chatId,setChatId}) {
+function ChatList({chatId,setChatId,setIsFirstLoad}) {
 
   const [chats, setChats] = useState([]);
   const userId = localStorage.getItem("user")
@@ -64,7 +64,7 @@ function ChatList({chatId,setChatId}) {
   }, []);
 
   const handleChatClick = (id) => {
-
+    setIsFirstLoad(true)
     setChatId(id);
   };
 

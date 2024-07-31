@@ -2,7 +2,7 @@ import React,{useRef,useEffect} from "react";
 import { TypeAnimation } from "react-type-animation";
 import { ToastContainer, toast } from "react-toastify";
 
-function GPTMessageBubble({ gptResponse }) {
+function GPTMessageBubble({ gptResponse, isFirstLoad, isLastMessage }) {
 
     const ref = useRef();
     useEffect(() => {
@@ -38,11 +38,18 @@ function GPTMessageBubble({ gptResponse }) {
           </div>
         </div>
         <div className=" h-full w-full p-3 text-black bg-gray-300 ">
+          {isFirstLoad ? 
+          <p>{gptResponse.message1}</p>
+          :
+          isLastMessage?
           <TypeAnimation
             sequence={[gptResponse.message1]}
             speed={90}
             cursor={false}
           />
+          :
+          <p>{gptResponse.message1}</p>
+        }
         </div>
       </div>
       <div className="flex flex-col flex-1 rounded-lg overflow-hidden">
@@ -62,11 +69,18 @@ function GPTMessageBubble({ gptResponse }) {
           </div>
         </div>
         <div className="h-full w-full p-3 text-black bg-gray-300">
-          <TypeAnimation
+          {isFirstLoad ?
+          <p>{gptResponse.message2}</p>
+          :
+          isLastMessage ?
+            <TypeAnimation
             sequence={[gptResponse.message2]}
             speed={90}
             cursor={false}
           />
+          :
+          <p>{gptResponse.message2}</p>
+        }
         </div>
       </div>
       <ToastContainer />
