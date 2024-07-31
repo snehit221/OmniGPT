@@ -13,43 +13,7 @@ import {
 } from "firebase/firestore";
 
 function ChatList({chatId,setChatId}) {
-  const chatlist = [
-    {
-      id: 1,
-      message: "How to integrate APIs in ReactJS jhdbqw dnqk diudj iduqd iuhqdq lqiuhdq  iquhdq liundqd ?",
-    },
-    {
-      id: 2,
-      message: "How to deploy a ReactJS application on Vercel?",
-    },
-    {
-      id: 3,
-      message: "What is react component?",
-    },
-    {
-      id: 4,
-      message:
-        "How to import tailwind class in ReactJS jdkjwed wdblwjdk wqbdlwd wkdnlkw wdbwejkd?",
-    },
-    {
-      id: 1,
-      message: "How to integrate APIs in ReactJS?",
-    },
-    {
-      id: 2,
-      message: "How to deploy a ReactJS application on Vercel?",
-    },
-    {
-      id: 3,
-      message: "What is react component?",
-    },
-    {
-      id: 4,
-      message:
-        "How to import tailwind class in ReactJS jdkjwed wdblwjdk wqbdlwd wkdnlkw wdbwejkd?",
-    },
 
-  ];
   const [chats, setChats] = useState([]);
   const userId = localStorage.getItem("user")
 
@@ -79,9 +43,7 @@ function ChatList({chatId,setChatId}) {
       
         if (doc.exists()) {
           const data = doc.data();
-          console.log("Document data:", data.messages);
           const messageList = [];
-          console.log(data);
           Object.keys(data).forEach((key) => {
             if(data[key].email!=null){
               return;

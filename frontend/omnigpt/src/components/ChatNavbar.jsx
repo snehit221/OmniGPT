@@ -27,7 +27,6 @@ export default function ChatNavbar({toggleChatList}) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log("Inside fetch user data");
 
       onAuthStateChanged(auth, async (currentUser) => {
         if (currentUser) {
