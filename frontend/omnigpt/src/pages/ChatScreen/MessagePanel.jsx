@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import UserBubble from "./UserBubble";
 import GPTMessageBubble from "./GPTMessageBubble";
 import { ToastContainer, toast } from "react-toastify";
-import { auth, db } from "../../config/firebase";
+import "react-toastify/dist/ReactToastify.css";
+import { db } from "../../config/firebase";
 // import { exportPDFWithComponent } from "../../util/pdfLib";
 import { importFile } from "../../util/importExportLib";
 import {
@@ -19,11 +20,15 @@ import { getGeminiResponse } from "../../util/gptUtil";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import pdfLogo from "../../assets/images/pdf.svg";
 import { exportFile } from "../../util/importExportLib";
+import { UserPlusIcon } from "@heroicons/react/20/solid";
+import AddUserModal from "./AddUserModal";
 
-function MessagePanel({ chatId, setChatId }) {
+function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
   const [messages, setMessages] = useState([]);
+  const [memberList, setMemberList] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   const messageSubRef = useRef(null);
   const pdfExportComponent = React.useRef(null);
 
@@ -41,6 +46,7 @@ function MessagePanel({ chatId, setChatId }) {
         if (doc.exists()) {
           const data = doc.data();
           const messageList = [];
+          const members = data.members;
           const result = data.messages;
           result.map((msg, index) => {
             if (msg.sender == "user") {
@@ -57,6 +63,7 @@ function MessagePanel({ chatId, setChatId }) {
                 gpt1: msg.gpt1,
                 gpt2: msg.gpt2,
                 sender: msg.sender,
+                likedResponse: msg?.likedResponse,
                 timestamp: msg.timestamp,
                 id: msg.id,
               });
@@ -64,6 +71,7 @@ function MessagePanel({ chatId, setChatId }) {
           });
 
           setMessages(messageList);
+          setMemberList(members);
         } else {
           console.log("No such document!");
         }
@@ -78,6 +86,10 @@ function MessagePanel({ chatId, setChatId }) {
     }
   }, [chatId]);
 
+  const handleDialogShow = () => {
+    setShowDialog(!showDialog);
+  };
+
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
@@ -90,6 +102,7 @@ function MessagePanel({ chatId, setChatId }) {
   };
 
   const handleSendMessage = async () => {
+    setIsFirstLoad(false);
     const userId = localStorage.getItem("user");
     if (isFormSubmitted) return;
 
@@ -113,6 +126,7 @@ function MessagePanel({ chatId, setChatId }) {
 
       // Construct the document data
       const docData = {
+        members: [userId],
         messages: [newMessage],
       };
 
@@ -150,7 +164,7 @@ function MessagePanel({ chatId, setChatId }) {
         toast.error("Error sending message. Please try again.");
       }
     } else {
-      console.log("chatId for second message:", chatId);
+      // console.log("chatId for second message:", chatId);
       const chatDocRef = doc(db, "chats", chatId);
 
       try {
@@ -158,10 +172,13 @@ function MessagePanel({ chatId, setChatId }) {
           messages: arrayUnion(newMessage),
         });
 
-        const conversationDocRef = doc(db, "conversations", userId);
-        await updateDoc(conversationDocRef, {
-          [`${chatId}.lastMessageTimestamp`]: newMessage.timestamp,
-          // [`${chatId}.message`]: newMessage.message,
+        memberList.map(async (memberId) => {
+          // console.log("Updating for memberId:", memberId);
+          const conversationDocRef = doc(db, "conversations", memberId);
+          await updateDoc(conversationDocRef, {
+            [`${chatId}.lastMessageTimestamp`]: newMessage.timestamp,
+            [`${chatId}.firstMessage`]: newMessage.message,
+          });
         });
       } catch (error) {
         console.error("Error updating document: ", error);
@@ -171,6 +188,7 @@ function MessagePanel({ chatId, setChatId }) {
 
     //
     const message1 = await getLlamaResponse(userInput);
+    // const message1 = await getGeminiResponse(userInput);
     const message2 = await getGeminiResponse(userInput);
     if (firebaseId != null) {
       addBotMessage(
@@ -205,7 +223,7 @@ function MessagePanel({ chatId, setChatId }) {
       } catch (err) {
         console.error("Error importing file:", err);
       }
-    };
+    }
     event.target.value = null;
   };
   const addBotMessage = async (
@@ -219,19 +237,18 @@ function MessagePanel({ chatId, setChatId }) {
   ) => {
     const userId = localStorage.getItem("user");
 
-    // Construct the new message object
     const newMessage = {
-      id: (messages.length + 2).toString(), // Or any other unique id generator
+      id: (messages.length + 2).toString(),
       sender,
       gpt1,
       gpt2,
       message1,
       message2,
       timestamp,
+      likedResponse: null,
     };
 
     try {
-      // Reference to the chat document
       const chatDocRef = doc(db, "chats", chatId);
       await updateDoc(chatDocRef, {
         messages: arrayUnion(newMessage),
@@ -242,11 +259,8 @@ function MessagePanel({ chatId, setChatId }) {
       await updateDoc(conversationDocRef, {
         [`${chatId}.lastMessageTimestamp`]: newMessage.timestamp,
       });
-
-      console.log("Message and conversation updated successfully.");
     } catch (error) {
       console.error("Error updating documents: ", error);
-      // Handle the error as needed, e.g., show a toast notification
     }
     setIsFormSubmitted(false);
   };
@@ -257,59 +271,119 @@ function MessagePanel({ chatId, setChatId }) {
     }
   };
 
+  const handleAddUser = async (useremail) => {
+    console.log("Inside handleAddUser", useremail);
+    const chatDocRef = doc(db, "chats", chatId);
+    try {
+      // Adding the new user to the "members" array
+      await updateDoc(chatDocRef, {
+        members: arrayUnion(useremail),
+      });
+
+      const conversationDocRef = doc(db, "conversations", useremail);
+      const conversationDoc = await getDoc(conversationDocRef);
+      const lastMessage=messages[messages.length-2]
+      if (conversationDoc.exists()) {
+        // If document exists, update it
+        await setDoc(
+          conversationDocRef,
+          {
+            [chatId]: {
+              firstMessage: lastMessage.message,
+              lastMessageTimestamp: lastMessage.timestamp,
+            },
+          },
+          { merge: true }
+        );
+      } else {
+        // If document does not exist, create a new one
+
+        await setDoc(conversationDocRef, {
+          [chatId]: {
+            firstMessage: lastMessage.message,
+            lastMessageTimestamp: lastMessage.timestamp,
+          },
+        });
+      }
+      toast.success("User added successfully");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+    handleDialogShow();
+  };
+
   return (
     <div className="flex flex-col  w-full h-full">
-      <div className="flex justify-end px-3 gap-6 sticky w-full h-14 bg-gray-600">
-        <button
-          className="text-sm hover:scale-125 transition ease-in-out duration-500  cursor-pointer"
-          onClick={exportPDFWithComponent}
-        >
-          <img src={pdfLogo} className="h-8" alt="pdf logo" />
-        </button>
-        <button
-          className="flex items-center text-sm hover:scale-125 transition ease-in-out duration-500 cursor-pointer"
-          onClick={() => exportFile(messages, new Date().getTime().toString())}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="white"
-            className="size-8"
-            width="24px"
-            height="24px"
+      {showDialog && (
+        <AddUserModal
+          showDialog={showDialog}
+          setShowDialog={setShowDialog}
+          handleAddUser={handleAddUser}
+        />
+      )}
+      <div className="flex justify-between sticky w-full h-14 items-center bg-gray-600">
+        <div className="p-3">
+          <button
+            onClick={() => handleDialogShow()}
+            className="flex items-center gap-2 text-white rounded-lg bg-gray-700 hover:bg-gray-800 hover:cursor-pointer p-2"
           >
-            <path
-              fillRule="evenodd"
-              d="M9.75 6.75h-3a3 3 0 0 0-3 3v7.5a3 3 0 0 0 3 3h7.5a3 3 0 0 0 3-3v-7.5a3 3 0 0 0-3-3h-3V1.5a.75.75 0 0 0-1.5 0v5.25Zm0 0h1.5v5.69l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72V6.75Z"
-              clipRule="evenodd"
+            <UserPlusIcon className="w-6 h-6 " />
+            Add User
+          </button>
+        </div>
+        <div className="flex px-3 gap-6 ">
+          <button
+            className="text-sm hover:scale-125 transition ease-in-out duration-500  cursor-pointer"
+            onClick={exportPDFWithComponent}
+          >
+            <img src={pdfLogo} className="h-8" alt="pdf logo" />
+          </button>
+          <button
+            className="flex items-center text-sm hover:scale-125 transition ease-in-out duration-500 cursor-pointer"
+            onClick={() =>
+              exportFile(messages, new Date().getTime().toString())
+            }
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="white"
+              className="size-8"
+              width="24px"
+              height="24px"
+            >
+              <path
+                fillRule="evenodd"
+                d="M9.75 6.75h-3a3 3 0 0 0-3 3v7.5a3 3 0 0 0 3 3h7.5a3 3 0 0 0 3-3v-7.5a3 3 0 0 0-3-3h-3V1.5a.75.75 0 0 0-1.5 0v5.25Zm0 0h1.5v5.69l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72V6.75Z"
+                clipRule="evenodd"
+              />
+              <path d="M7.151 21.75a2.999 2.999 0 0 0 2.599 1.5h7.5a3 3 0 0 0 3-3v-7.5c0-1.11-.603-2.08-1.5-2.599v7.099a4.5 4.5 0 0 1-4.5 4.5H7.151Z" />
+            </svg>
+          </button>
+
+          <label
+            htmlFor="file-upload"
+            className="cursor-pointer inline-flex align-middle items-center"
+          >
+            <input
+              type="file"
+              id="file-upload"
+              accept=".json"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
             />
-            <path d="M7.151 21.75a2.999 2.999 0 0 0 2.599 1.5h7.5a3 3 0 0 0 3-3v-7.5c0-1.11-.603-2.08-1.5-2.599v7.099a4.5 4.5 0 0 1-4.5 4.5H7.151Z" />
-          </svg>
-        </button>
-        
-        <label
-          htmlFor="file-upload"
-          className="cursor-pointer inline-flex align-middle items-center"
-        
-        >
-          <input
-            type="file"
-            id="file-upload"
-            accept=".json"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="white"
-            className="size-8"
-          >
-            <path d="M9.97.97a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1-1.06 1.06l-1.72-1.72v3.44h-1.5V3.31L8.03 5.03a.75.75 0 0 1-1.06-1.06l3-3ZM9.75 6.75v6a.75.75 0 0 0 1.5 0v-6h3a3 3 0 0 1 3 3v7.5a3 3 0 0 1-3 3h-7.5a3 3 0 0 1-3-3v-7.5a3 3 0 0 1 3-3h3Z" />
-            <path d="M7.151 21.75a2.999 2.999 0 0 0 2.599 1.5h7.5a3 3 0 0 0 3-3v-7.5c0-1.11-.603-2.08-1.5-2.599v7.099a4.5 4.5 0 0 1-4.5 4.5H7.151Z" />
-          </svg>
-        </label>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="white"
+              className="size-8"
+            >
+              <path d="M9.97.97a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1-1.06 1.06l-1.72-1.72v3.44h-1.5V3.31L8.03 5.03a.75.75 0 0 1-1.06-1.06l3-3ZM9.75 6.75v6a.75.75 0 0 0 1.5 0v-6h3a3 3 0 0 1 3 3v7.5a3 3 0 0 1-3 3h-7.5a3 3 0 0 1-3-3v-7.5a3 3 0 0 1 3-3h3Z" />
+              <path d="M7.151 21.75a2.999 2.999 0 0 0 2.599 1.5h7.5a3 3 0 0 0 3-3v-7.5c0-1.11-.603-2.08-1.5-2.599v7.099a4.5 4.5 0 0 1-4.5 4.5H7.151Z" />
+            </svg>
+          </label>
+        </div>
       </div>
       <div
         id="message"
@@ -323,12 +397,17 @@ function MessagePanel({ chatId, setChatId }) {
             fileName={`chat-${Date.now()}.pdf`}
             author="OmniGPT"
           >
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div key={message.id}>
                 {message.sender === "user" ? (
                   <UserBubble message={message.message} />
                 ) : (
-                  <GPTMessageBubble gptResponse={message} />
+                  <GPTMessageBubble
+                    gptResponse={message}
+                    isFirstLoad={isFirstLoad}
+                    isLastMessage={index === messages.length - 1}
+                    chatId={chatId}
+                  />
                 )}
               </div>
             ))}
@@ -359,8 +438,8 @@ function MessagePanel({ chatId, setChatId }) {
             </svg>
           </button>
         </div>
-        <ToastContainer />
       </div>
+      <ToastContainer />
     </div>
   );
 }

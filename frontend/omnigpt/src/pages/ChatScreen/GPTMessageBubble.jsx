@@ -1,31 +1,77 @@
-import React,{useRef,useEffect} from "react";
+import React, { useRef, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
+import { HandThumbUpIcon } from "@heroicons/react/20/solid";
+import { HandThumbUpIcon as HandThumbDownIconOutline } from "@heroicons/react/24/outline";
+import { db } from "../../config/firebase";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
-
-function GPTMessageBubble({ gptResponse }) {
-
-    const ref = useRef();
-    useEffect(() => {
-        ref.current?.scrollIntoView({ behavior: "smooth" });
-    }, [gptResponse]);
-    
-    const handleCopy = (copyMesage) => {
-        console.log("Inside handle copy");
-        navigator.clipboard.writeText(copyMesage).then(() => {
-          console.log("Text copied to clipboard:", copyMesage);
-        }).catch((error) => {
-          console.error("Failed to copy text:", error);
-        });
-      };
+import "react-toastify/dist/ReactToastify.css";
 
 
+function GPTMessageBubble({ gptResponse, isFirstLoad, isLastMessage, chatId }) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  }, [gptResponse]);
+
+  const handleCopy = (copyMesage) => {
+    // console.log("Inside handle copy");
+    navigator.clipboard
+      .writeText(copyMesage)
+      .then(() => {
+        toast.success("Copied to clipboard");
+        // console.log("Text copied to clipboard:", copyMesage);
+      })
+      .catch((error) => {
+        console.error("Failed to copy text:", error);
+      });
+  };
+  const updateMessage = async (chatId, messageId, likedResponse) => {
+    try {
+      // Reference to the specific document in the chats collection
+      const chatDocRef = doc(db, 'chats', chatId);
+  
+      // Gets the current messages array
+      const chatSnapshot = await getDoc(chatDocRef);
+      const chatData = chatSnapshot.data();
+  
+      // Finding the message to update
+      const messages = chatData.messages.map(message => {
+        if (message.id === messageId) {
+          return { ...message, likedResponse: likedResponse };
+        }
+        return message;
+      });
+  
+      await updateDoc(chatDocRef, { messages });
+      // console.log('Message updated successfully!');
+    } catch (error) {
+      console.error('Error updating message: ', error);
+    }
+  };
+  
   return (
     <div className="w-full flex flex-col md:flex-row my-3  gap-3">
       <div className="flex flex-col flex-1 rounded-lg overflow-hidden">
         <div className="flex bg-gray-900 justify-between p-3">
-          <div className=" text-white">{gptResponse.gpt1}</div>
-          <div className=" text-white hover:cursor-pointer"
-          onClick={() => handleCopy(gptResponse.message1)}>
+          <div className=" text-white flex gap-4 items-center">
+            <div className=" text-white">{gptResponse.gpt1}</div>
+            <button className=" hover:cursor-pointer">
+              {gptResponse.likedResponse === undefined || gptResponse.likedResponse === null ? (
+                <HandThumbDownIconOutline onClick={() => updateMessage(chatId, gptResponse.id, gptResponse.gpt1)} className="w-5 h-5 " />
+              ) : gptResponse.likedResponse === gptResponse.gpt1 ? (
+                <HandThumbUpIcon className="w-5 h-5 " />
+              ) : null}
+            </button>
+          </div>
+          <div
+            className=" text-white hover:cursor-pointer"
+            onClick={() => handleCopy(gptResponse.message1)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -38,18 +84,35 @@ function GPTMessageBubble({ gptResponse }) {
           </div>
         </div>
         <div className=" h-full w-full p-3 text-black bg-gray-300 ">
-          <TypeAnimation
-            sequence={[gptResponse.message1]}
-            speed={90}
-            cursor={false}
-          />
+          {isFirstLoad ? (
+            <p>{gptResponse.message1}</p>
+          ) : isLastMessage ? (
+            <TypeAnimation
+              sequence={[gptResponse.message1]}
+              speed={90}
+              cursor={false}
+            />
+          ) : (
+            <p>{gptResponse.message1}</p>
+          )}
         </div>
       </div>
       <div className="flex flex-col flex-1 rounded-lg overflow-hidden">
         <div className="flex bg-gray-900 justify-between p-3">
-          <div className=" text-white">{gptResponse.gpt2}</div>
-          <div className=" text-white hover:cursor-pointer"
-          onClick={() => handleCopy(gptResponse.message2)}>
+          <div className=" text-white flex gap-4 items-center">
+            <div className=" text-white">{gptResponse.gpt2}</div>
+            <button>
+              {gptResponse.likedResponse === undefined || gptResponse.likedResponse === null ? (
+                <HandThumbDownIconOutline onClick={() => updateMessage(chatId, gptResponse.id, gptResponse.gpt2)} className="w-5 h-5 " />
+              ) : gptResponse.likedResponse === gptResponse.gpt2 ? (
+                <HandThumbUpIcon className="w-5 h-5 " />
+              ) : null}
+            </button>
+          </div>
+          <div
+            className=" text-white hover:cursor-pointer"
+            onClick={() => handleCopy(gptResponse.message2)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -62,14 +125,19 @@ function GPTMessageBubble({ gptResponse }) {
           </div>
         </div>
         <div className="h-full w-full p-3 text-black bg-gray-300">
-          <TypeAnimation
-            sequence={[gptResponse.message2]}
-            speed={90}
-            cursor={false}
-          />
+          {isFirstLoad ? (
+            <p>{gptResponse.message2}</p>
+          ) : isLastMessage ? (
+            <TypeAnimation
+              sequence={[gptResponse.message2]}
+              speed={90}
+              cursor={false}
+            />
+          ) : (
+            <p>{gptResponse.message2}</p>
+          )}
         </div>
       </div>
-      <ToastContainer />
       <div ref={ref}></div>
     </div>
   );

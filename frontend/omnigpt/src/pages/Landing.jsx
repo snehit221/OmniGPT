@@ -99,8 +99,8 @@ export default function Landing() {
       setUser(localStorage.getItem("username")) // setting username
       console.log("this is the username set", setUser)
     }
-    console.log("Token", token)
-    console.log("User",user)
+    // console.log("Token", token)
+    // console.log("User",user)
       },[])
  
   const handleLogout = () => {
