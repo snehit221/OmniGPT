@@ -60,7 +60,7 @@ function ChatScreen() {
         <div
           className={`fixed md:relative overflow-hidden md:flex ${
             isChatListVisible ? "w-full" : "w-1/4"
-          } w-1/4 z-50 bg-gray-900 transition-transform transform ${
+          } w-1/4 z-40 bg-gray-900 transition-transform transform ${
             isChatListVisible ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0`}
         >
