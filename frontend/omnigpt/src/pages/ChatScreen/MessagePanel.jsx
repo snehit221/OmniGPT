@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import UserBubble from "./UserBubble";
 import GPTMessageBubble from "./GPTMessageBubble";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { db } from "../../config/firebase";
 // import { exportPDFWithComponent } from "../../util/pdfLib";
 import { importFile } from "../../util/importExportLib";
@@ -19,15 +20,15 @@ import { getGeminiResponse } from "../../util/gptUtil";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import pdfLogo from "../../assets/images/pdf.svg";
 import { exportFile } from "../../util/importExportLib";
-import {
-  UserPlusIcon,
-} from "@heroicons/react/20/solid";
-
+import { UserPlusIcon } from "@heroicons/react/20/solid";
+import AddUserModal from "./AddUserModal";
 
 function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
   const [messages, setMessages] = useState([]);
+  const [memberList, setMemberList] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   const messageSubRef = useRef(null);
   const pdfExportComponent = React.useRef(null);
 
@@ -45,6 +46,7 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
         if (doc.exists()) {
           const data = doc.data();
           const messageList = [];
+          const members = data.members;
           const result = data.messages;
           result.map((msg, index) => {
             if (msg.sender == "user") {
@@ -69,6 +71,7 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
           });
 
           setMessages(messageList);
+          setMemberList(members);
         } else {
           console.log("No such document!");
         }
@@ -82,6 +85,10 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
       };
     }
   }, [chatId]);
+
+  const handleDialogShow = () => {
+    setShowDialog(!showDialog);
+  };
 
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
@@ -119,6 +126,7 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
 
       // Construct the document data
       const docData = {
+        members: [userId],
         messages: [newMessage],
       };
 
@@ -164,10 +172,13 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
           messages: arrayUnion(newMessage),
         });
 
-        const conversationDocRef = doc(db, "conversations", userId);
-        await updateDoc(conversationDocRef, {
-          [`${chatId}.lastMessageTimestamp`]: newMessage.timestamp,
-          // [`${chatId}.message`]: newMessage.message,
+        memberList.map(async (memberId) => {
+          // console.log("Updating for memberId:", memberId);
+          const conversationDocRef = doc(db, "conversations", memberId);
+          await updateDoc(conversationDocRef, {
+            [`${chatId}.lastMessageTimestamp`]: newMessage.timestamp,
+            [`${chatId}.firstMessage`]: newMessage.message,
+          });
         });
       } catch (error) {
         console.error("Error updating document: ", error);
@@ -176,8 +187,8 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
     }
 
     //
-    // const message1 = await getLlamaResponse(userInput);
-    const message1 = await getGeminiResponse(userInput);
+    const message1 = await getLlamaResponse(userInput);
+    // const message1 = await getGeminiResponse(userInput);
     const message2 = await getGeminiResponse(userInput);
     if (firebaseId != null) {
       addBotMessage(
@@ -226,7 +237,6 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
   ) => {
     const userId = localStorage.getItem("user");
 
-    // Construct the new message object
     const newMessage = {
       id: (messages.length + 2).toString(),
       sender,
@@ -239,7 +249,6 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
     };
 
     try {
-      // Reference to the chat document
       const chatDocRef = doc(db, "chats", chatId);
       await updateDoc(chatDocRef, {
         messages: arrayUnion(newMessage),
@@ -250,11 +259,8 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
       await updateDoc(conversationDocRef, {
         [`${chatId}.lastMessageTimestamp`]: newMessage.timestamp,
       });
-
-      // console.log("Message and conversation updated successfully.");
     } catch (error) {
       console.error("Error updating documents: ", error);
-      // Handle the error as needed, e.g., show a toast notification
     }
     setIsFormSubmitted(false);
   };
@@ -265,13 +271,62 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
     }
   };
 
+  const handleAddUser = async (useremail) => {
+    console.log("Inside handleAddUser", useremail);
+    const chatDocRef = doc(db, "chats", chatId);
+    try {
+      // Adding the new user to the "members" array
+      await updateDoc(chatDocRef, {
+        members: arrayUnion(useremail),
+      });
 
+      const conversationDocRef = doc(db, "conversations", useremail);
+      const conversationDoc = await getDoc(conversationDocRef);
+      const lastMessage=messages[messages.length-2]
+      if (conversationDoc.exists()) {
+        // If document exists, update it
+        await setDoc(
+          conversationDocRef,
+          {
+            [chatId]: {
+              firstMessage: lastMessage.message,
+              lastMessageTimestamp: lastMessage.timestamp,
+            },
+          },
+          { merge: true }
+        );
+      } else {
+        // If document does not exist, create a new one
+
+        await setDoc(conversationDocRef, {
+          [chatId]: {
+            firstMessage: lastMessage.message,
+            lastMessageTimestamp: lastMessage.timestamp,
+          },
+        });
+      }
+      toast.success("User added successfully");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+    handleDialogShow();
+  };
 
   return (
     <div className="flex flex-col  w-full h-full">
+      {showDialog && (
+        <AddUserModal
+          showDialog={showDialog}
+          setShowDialog={setShowDialog}
+          handleAddUser={handleAddUser}
+        />
+      )}
       <div className="flex justify-between sticky w-full h-14 items-center bg-gray-600">
         <div className="p-3">
-          <button className="flex items-center gap-2 text-white rounded-lg bg-gray-700 hover:bg-gray-800 hover:cursor-pointer p-2">
+          <button
+            onClick={() => handleDialogShow()}
+            className="flex items-center gap-2 text-white rounded-lg bg-gray-700 hover:bg-gray-800 hover:cursor-pointer p-2"
+          >
             <UserPlusIcon className="w-6 h-6 " />
             Add User
           </button>
@@ -342,24 +397,20 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
             fileName={`chat-${Date.now()}.pdf`}
             author="OmniGPT"
           >
-            {messages.map(
-              (message, index) => (
-                (
-                  <div key={message.id}>
-                    {message.sender === "user" ? (
-                      <UserBubble message={message.message} />
-                    ) : (
-                      <GPTMessageBubble
-                        gptResponse={message}
-                        isFirstLoad={isFirstLoad}
-                        isLastMessage={index === messages.length - 1}
-                        chatId={chatId}
-                      />
-                    )}
-                  </div>
-                )
-              )
-            )}
+            {messages.map((message, index) => (
+              <div key={message.id}>
+                {message.sender === "user" ? (
+                  <UserBubble message={message.message} />
+                ) : (
+                  <GPTMessageBubble
+                    gptResponse={message}
+                    isFirstLoad={isFirstLoad}
+                    isLastMessage={index === messages.length - 1}
+                    chatId={chatId}
+                  />
+                )}
+              </div>
+            ))}
           </PDFExport>
         </div>
         <div className=" w-full flex gap-2">
@@ -387,8 +438,8 @@ function MessagePanel({ chatId, setChatId, isFirstLoad, setIsFirstLoad }) {
             </svg>
           </button>
         </div>
-        <ToastContainer />
       </div>
+      <ToastContainer />
     </div>
   );
 }

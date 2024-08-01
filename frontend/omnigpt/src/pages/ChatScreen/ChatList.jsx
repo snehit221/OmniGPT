@@ -5,10 +5,7 @@ import { v4 as uuid} from "uuid";
 import {
   setDoc,
   doc,
-  collection,
   getDoc,
-  updateDoc,
-  arrayUnion,
   onSnapshot,
 } from "firebase/firestore";
 

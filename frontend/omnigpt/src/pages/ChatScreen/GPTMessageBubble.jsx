@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { ToastContainer, toast } from "react-toastify";
 import { HandThumbUpIcon } from "@heroicons/react/20/solid";
 import { HandThumbUpIcon as HandThumbDownIconOutline } from "@heroicons/react/24/outline";
 import { db } from "../../config/firebase";
@@ -9,6 +8,8 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function GPTMessageBubble({ gptResponse, isFirstLoad, isLastMessage, chatId }) {
@@ -18,11 +19,12 @@ function GPTMessageBubble({ gptResponse, isFirstLoad, isLastMessage, chatId }) {
   }, [gptResponse]);
 
   const handleCopy = (copyMesage) => {
-    console.log("Inside handle copy");
+    // console.log("Inside handle copy");
     navigator.clipboard
       .writeText(copyMesage)
       .then(() => {
-        console.log("Text copied to clipboard:", copyMesage);
+        toast.success("Copied to clipboard");
+        // console.log("Text copied to clipboard:", copyMesage);
       })
       .catch((error) => {
         console.error("Failed to copy text:", error);
@@ -136,7 +138,6 @@ function GPTMessageBubble({ gptResponse, isFirstLoad, isLastMessage, chatId }) {
           )}
         </div>
       </div>
-      <ToastContainer />
       <div ref={ref}></div>
     </div>
   );
