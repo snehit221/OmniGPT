@@ -74,7 +74,7 @@ const footerNavigation = {
   support: [
     { name: 'Pricing', href: '/pricing' },
     { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: 'Faq', href: '/faq' },
     { name: 'API Status', href: '#' },
   ],
   company: [
@@ -87,7 +87,7 @@ const footerNavigation = {
   legal: [
     { name: 'Claim', href: '#' },
     { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
+    { name: 'Terms', href: '/terms' },
   ],
 }
 
