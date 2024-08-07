@@ -10,6 +10,8 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
+import About from './pages/About';
+import Marketing from './pages/Marketing';
 
 function App() {
     return (
@@ -27,7 +29,8 @@ function App() {
             <Route path="/terms" element={<TermsAndConditions />} />
 
             <Route path='/login' element={<Login />} />
-
+            <Route path='/about' element={<About />} />
+ 
             <Route element={<PrivateRoute />}>
               <Route path="/chat" element={<ChatScreen />} />
             </Route>
@@ -36,5 +39,6 @@ function App() {
       </Router>
     )
 }
-
+ 
 export default App
+ 

@@ -6,7 +6,7 @@ import LogIN from '../assets/images/gpt-bg.jpg';
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "../stylesheets/login.css"
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, getDoc, doc } from "firebase/firestore";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -32,9 +32,22 @@ function Login() {
     const user = userCredential.user;
     toast.success("User LogIn Successful!", { position: "top-right" });
     localStorage.setItem("token", await user.getIdToken());
-    console.log("User ",user)
     localStorage.setItem("user", user.email);
-    console.log(user.email)
+
+    // Fetch the display name from Firestore
+    const userDoc = await getDoc(doc(db, "users", user.uid)); // Assuming 'users' collection
+    if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const displayName = userData.name || "Default Name"; // Use default if displayName is not set
+
+        localStorage.setItem("username", displayName);
+        console.log("Display Name: ", displayName);
+    } else {
+        console.log("No such document!");
+    }
+
+    console.log("User ", user);
+
     setTimeout(() => {
       navigate("/");
     }, 2500);
@@ -45,7 +58,7 @@ function Login() {
     setLoading(false);
     setFormData({ email: "", password: "" });
   }
-  };
+};
 
   const handleGoogleLogin = async () => {
    // Google Authentication
@@ -65,6 +78,7 @@ function Login() {
       toast.success("User LogIn Successful!", { position: "top-right" });
       localStorage.setItem("token", await user.getIdToken());
       localStorage.setItem("user", user.email);
+      localStorage.setItem("username", user.displayName);
       setTimeout(() => {
         navigate("/");
       }, 2500);
