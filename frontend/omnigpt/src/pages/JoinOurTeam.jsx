@@ -1,22 +1,22 @@
 import React from 'react';
-import logoWhite from '../assets/images/logos/logo-no-background.svg';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer';
 
 const JoinOurTeam = () => {
   return (
+    <>
     <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center py-24">
-        <Navbar />
+      <Navbar />
       <div className="py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
-            <img src={logoWhite} alt="Logo" className="h-20 mx-auto mb-4" />
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Join Our Team</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Join Our Team</h1>
             <p className="mt-4 text-lg text-gray-400">We are looking for passionate individuals to join us at OmniGPT. If you are excited about working with cutting-edge AI technology and making a significant impact, we would love to hear from you!</p>
           </div>
           <div className="mt-10 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Current Job Openings</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Current Job Openings</h2>
             <div className="mt-6 space-y-6">
               <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
                 <h3 className="text-2xl font-semibold text-white">Full-Stack Developer</h3>
@@ -39,6 +39,8 @@ const JoinOurTeam = () => {
       </div>
       <ToastContainer />
     </div>
+    <Footer />
+    </>
   );
 };
 

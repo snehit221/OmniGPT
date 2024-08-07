@@ -2,6 +2,8 @@
 import React from 'react';
 import heroImage from '../assets/images/gpt-bg.jpg'; // Replace with your hero image
 import customerImage from '../assets/images/default-profile-image.png'; // Replace with your testimonial image
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const testimonials = [
   {
@@ -24,11 +26,12 @@ const testimonials = [
 export default function Marketing() {
     return (
       <div className="bg-white">
+        <Navbar />
         {/* Hero Section */}
         <section className="relative bg-gray-900 text-white py-20">
-          <div className="container mx-auto px-6 lg:px-8">
+          <div className="container mx-auto mt-16 px-6 lg:px-8">
             <div className="flex flex-col items-center text-center">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">Unlock Your Potential with OmniGPT</h1>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Unlock Your Potential with OmniGPT</h1>
               <p className="mt-6 text-lg leading-8 text-gray-300">
                 Discover the power of multiple GPT models at your fingertips. Enhance your productivity, creativity, and efficiency with OmniGPT.
               </p>
@@ -104,7 +107,7 @@ export default function Marketing() {
         </section>
   
         {/* Call to Action Section */}
-        <section className="py-20 bg-indigo-600 text-white text-center">
+        <section className="py-20 bg-[#111827] text-white text-center">
           <div className="container mx-auto px-6 lg:px-8">
             <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
             <p className="mt-6 text-lg">
@@ -118,6 +121,8 @@ export default function Marketing() {
             </a>
           </div>
         </section>
+
+        <Footer />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
  
 const TermsContainer = styled.div`
   padding: 2rem;
@@ -61,6 +62,7 @@ const TermsAndConditions = () => {
   ];
  
   return (
+    <>
     <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center py-24">
       <Navbar/>
       <div className="py-8 sm:py-12">
@@ -79,6 +81,8 @@ const TermsAndConditions = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
  

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
  
 const FAQContainer = styled.div`
   padding: 2rem;
-  max-width: 800px;
+  width: 800px;
   margin: auto;
 `;
  
@@ -68,6 +68,7 @@ const FAQ = () => {
   ];
  
   return (
+    <>
     <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center py-24">
 <Navbar/>
       <div className="py-8 sm:py-12">
@@ -98,8 +99,9 @@ const FAQ = () => {
           </FAQContainer>
         </div>
       </div>
-      <ToastContainer />
     </div>
+    <Footer />
+    </>
   );
 };
  

@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import backgroundImage from '../assets/images/landing-background.png'
 import logoWhite from '../assets/images/logos/logo-no-background.svg'
 import gemini from '../assets/images/gemini.png'
-import chatgpt from '../assets/images/chatgpt.png'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   ArrowPathIcon,
   CloudArrowUpIcon,
@@ -14,12 +11,9 @@ import {
   LockClosedIcon,
   ServerIcon,
 } from '@heroicons/react/20/solid'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import llama from '../assets/images/meta.png';
 import Navbar from '../components/Navbar'
- 
-function classNames(...classes) {return classes.filter(Boolean).join(' ')}
+import Footer from '../components/Footer'
  
 const testimonial = {
   name: 'Jessica Brown',
@@ -277,75 +271,7 @@ export default function Landing() {
       </main>
  
       {/* Footer */}
-      {/* This is a dummy footer */}
-      <footer className="mt-32 bg-gray-900 sm:mt-56" aria-labelledby="footer-heading">
-        <h2 id="footer-heading" className="sr-only">
-          Footer
-        </h2>
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
-          <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-            <img
-              className="h-24 lg:h-48"
-              src={logoWhite}
-              alt="Company name"
-            />
-            <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-sm font-semibold leading-6 text-white">Solutions</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.solutions.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-white">Support</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.support.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-sm font-semibold leading-6 text-white">Company</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.company.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-white">Legal</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.legal.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

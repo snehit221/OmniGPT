@@ -25,12 +25,18 @@ export default function Example() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { firstName, lastName, email, phoneNumber, message } = formData;
+
+    // Check if any field is empty
+    if (!firstName || !lastName || !email || !phoneNumber || !message) {
+      toast.error("All fields are required.", { position: "top-right" });
+      return;
+    }
+
     try {
       // Assuming 'contactMessages' is the collection name in Firestore
       await addDoc(collection(db, 'contactMessages'), formData);
-      toast.success("Your message has been sent!", {
-        position: "top-right"
-      });
+      toast.success("Your message has been sent!", { position: "top-right" });
       setFormData({
         firstName: '',
         lastName: '',

@@ -6,6 +6,7 @@ import { logEvent } from "firebase/analytics";
 import Navbar from "../components/Navbar";
 import ReactGA from "react-ga";
 import ReactLoading from "react-loading";
+import Footer from "../components/Footer";
 
 const tiers = [
   {
@@ -109,7 +110,8 @@ export default function Pricing() {
   };
 
   return (
-    <div className="bg-gray-900 w-screen h-screen py-24 sm:py-32">
+    <>
+    <div className="bg-gray-900 w-full h-full min-w-screen min-h-screen py-24 sm:py-32">
       <Navbar />
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
@@ -180,5 +182,7 @@ export default function Pricing() {
         )}
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
