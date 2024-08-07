@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "../stylesheets/login.css"
 import { setDoc, getDoc, doc } from "firebase/firestore";
 import { logEvent } from "firebase/analytics";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -51,9 +51,9 @@ function Login() {
     console.log("User ", user);
 
     ReactGA.event({
-      'category': "Login",
-      'action': "User Logged In",
-      'label': user.email,
+      category: "Login",
+      action: "User Logged In",
+      label: user.email,
     });
 
     logEvent(analytics, "login_success");
@@ -90,9 +90,9 @@ function Login() {
       localStorage.setItem("username", user.displayName);
 
       ReactGA.event({
-        'category': "Login",
-        'action': "User Logged In",
-        'label': user.email,
+        category: "Login",
+        action: "User Logged In",
+        label: user.email,
       });
       logEvent(analytics, "login_success");
       setTimeout(() => {

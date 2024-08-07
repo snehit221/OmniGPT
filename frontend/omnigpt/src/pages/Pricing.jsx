@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, analytics } from "../config/firebase";
 import { logEvent } from "firebase/analytics";
 import Navbar from "../components/Navbar";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import ReactLoading from "react-loading";
 
 const tiers = [
@@ -60,9 +60,9 @@ export default function Pricing() {
       setUser(localStorage.getItem("user"));
     }
     ReactGA.event({
-      'category': "Pricing",
-      'action': "User Viewed Pricing Page",
-      'label': "view",
+      category: "Pricing",
+      action: "User Viewed Pricing Page",
+      label: "view",
     });
     logEvent(analytics, "pricing_page_viewed");
   }, []);
