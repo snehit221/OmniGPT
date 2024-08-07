@@ -60,9 +60,9 @@ export default function Pricing() {
       setUser(localStorage.getItem("user"));
     }
     ReactGA.event({
-      category: "Pricing",
-      action: "User Viewed Pricing Page",
-      label: "view",
+      'category': "Pricing",
+      'action': "User Viewed Pricing Page",
+      'label': "view",
     });
     logEvent(analytics, "pricing_page_viewed");
   }, []);
