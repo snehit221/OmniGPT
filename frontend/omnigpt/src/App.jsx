@@ -5,12 +5,16 @@ import Pricing from './pages/Pricing';
 import Success from './pages/Success'
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
+import FAQ from './pages/Faq';
+import TermsAndConditions from './pages/TermsAndConditions';
 import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
  
+import Marketing from './pages/Marketing';
+
 function App() {
     return (
       <Router>
@@ -23,6 +27,9 @@ function App() {
             <Route path='/profile' element={<Profile />}></Route>
             <Route path='/success' element={<Success />}></Route>
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
+
             <Route path='/login' element={<Login />} />
             <Route path='/about' element={<About />} />
             <Route path='/contactus' element={<ContactUs />} />

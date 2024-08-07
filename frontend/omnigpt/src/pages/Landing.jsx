@@ -61,7 +61,7 @@ const features = [
  
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
+    { name: 'Marketing', href: '/marketing' },
     { name: 'Analytics', href: '#' },
     { name: 'Commerce', href: '#' },
     { name: 'Insights', href: '#' },
@@ -69,7 +69,7 @@ const footerNavigation = {
   support: [
     { name: 'Pricing', href: '/pricing' },
     { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: 'Faq', href: '/faq' },
     { name: 'API Status', href: '#' },
   ],
   company: [
@@ -82,7 +82,7 @@ const footerNavigation = {
   legal: [
     { name: 'Claim', href: '#' },
     { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
+    { name: 'Terms', href: '/terms' },
   ],
 }
  
