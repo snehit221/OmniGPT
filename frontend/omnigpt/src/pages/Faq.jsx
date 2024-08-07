@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Navbar from '../components/Navbar';
  
 const FAQContainer = styled.div`
   padding: 2rem;
@@ -38,11 +39,6 @@ const Answer = styled.div`
   display: ${props => (props.isOpen ? 'block' : 'none')};
 `;
 
-const navigation = [
-    { name: "Home", route: "/" },
-    { name: "Pricing", route: "/pricing" },
-    { name: "Chat", route: "/chat" },
-  ];
  
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -73,7 +69,7 @@ const FAQ = () => {
  
   return (
     <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center py-24">
-
+<Navbar/>
       <div className="py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">

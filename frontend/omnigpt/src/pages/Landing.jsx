@@ -75,7 +75,7 @@ const footerNavigation = {
   company: [
     { name: 'About', href: '/about' },
     { name: 'Contact Us', href: '/contactus' },
-    { name: 'Jobs', href: '#' },
+    { name: 'Jobs', href: '/joinourteam' },
     { name: 'Press', href: '#' },
     { name: 'Partners', href: '#' },
   ],
