@@ -2,12 +2,14 @@ import { useState } from "react";
 import backgroundImage from "../assets/images/landing-background.png";
 import logoWhite from "../assets/images/logos/logo-no-background.svg";
 import { Link, useNavigate } from 'react-router-dom'
-import { auth, db } from "../config/firebase";
+import { auth, db , analytics } from "../config/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { logEvent } from "firebase/analytics";
+import ReactGA from "react-ga";
 
 export default function Register() {
     const navigate = useNavigate()
@@ -34,6 +36,13 @@ export default function Register() {
             name: name
           });
         }
+
+        ReactGA.event({
+          'category': "Registration",
+          'action': "User Registered",
+          'label': user.email,
+        });
+        logEvent(analytics, "registration_success");
         console.log("User Registered Successfully!!");
         toast.success("User Registered Successfully !", {
           position: "top-right"
