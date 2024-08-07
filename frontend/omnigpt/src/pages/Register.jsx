@@ -9,7 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-
 export default function Register() {
     const navigate = useNavigate()
     const [email, setEmail] = useState("");

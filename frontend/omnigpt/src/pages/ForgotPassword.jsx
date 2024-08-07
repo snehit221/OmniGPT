@@ -7,6 +7,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "../components/Navbar";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -33,6 +34,7 @@ function ForgotPassword() {
 
   return (
     <div className="flex h-screen">
+      <Navbar />
       <div className="w-full flex flex-col justify-center items-center bg-primarybg p-8">
         <div className="mb-4">
           <img src={logo} alt="Logo" className="w-40 h-auto" />
