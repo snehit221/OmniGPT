@@ -61,7 +61,7 @@ const features = [
  
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
+    { name: 'Marketing', href: '/marketing' },
     { name: 'Analytics', href: '#' },
     { name: 'Commerce', href: '#' },
     { name: 'Insights', href: '#' },

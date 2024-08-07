@@ -9,7 +9,8 @@ import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
 import About from './pages/About';
- 
+import Marketing from './pages/Marketing';
+
 function App() {
     return (
       <Router>
@@ -22,6 +23,7 @@ function App() {
             <Route path='/profile' element={<Profile />}></Route>
             <Route path='/success' element={<Success />}></Route>
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
+            <Route path="/marketing" element={<Marketing />} />
             <Route path='/login' element={<Login />} />
             <Route path='/about' element={<About />} />
  
