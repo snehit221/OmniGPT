@@ -7,6 +7,8 @@ import defaultProfileImage from '../assets/images/default-profile-image.png';
 import Navbar from './Navbar';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom'
+
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -15,6 +17,7 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState(defaultProfileImage);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -67,6 +70,7 @@ const Profile = () => {
     try {
       await updatePassword(auth.currentUser, newPassword);
       toast.success('Password updated successfully!');
+      setTimeout(() => navigate('/'), 3000);
     } catch (error) {
       if (error.code === 'auth/requires-recent-login') {
         toast.error(`User is not authenticated. Please reauthenticate.`);
