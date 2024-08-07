@@ -12,7 +12,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
- 
+import JoinOurTeam from './pages/JoinOurTeam';
 import Marketing from './pages/Marketing';
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
             <Route path="/send-forgot-password-email" element={<ForgotPassword />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/terms" element={<TermsAndConditions />} />
-
+            <Route path="/joinourteam" element={<JoinOurTeam />} />
             <Route path="/marketing" element={<Marketing />} />
             <Route path='/login' element={<Login />} />
             <Route path='/about' element={<About />} />
