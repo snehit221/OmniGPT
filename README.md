@@ -4,14 +4,13 @@
 
 Welcome to **OmniGPT**, your one-stop platform for accessing multiple GPT models in a single app. Whether you're crafting content, developing code, or conducting research, OmniGPT empowers you to compare and select the best responses for your needs. Experience unparalleled flexibility, enhance your work's quality, and save on costs with our affordable subscription plans. Discover the power of multiple GPTs at your fingertips. Sign up today!
 
-## Features accomplished in the current deliverable
+## Features accomplished in the current deliverable (D4)
 
-- Google Analytics
+- Integrated Google Analytics
 - Add and share chat with multiple users
 - Get user feedback on each response
-- Fixed react animation for previously loaded message
+- Fixed react animation for previously loaded messages
 - Added Loading Sceen on purchase of plan
-- Share Chat using an email
 - Import and export chat in JSON
 - Download Chat as PDF
 - About Page
