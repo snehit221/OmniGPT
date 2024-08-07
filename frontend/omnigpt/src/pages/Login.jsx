@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import {auth, db } from '../config/firebase'
+import {auth, db, analytics } from '../config/firebase'
 import logo from '../assets/images/logos/logo-no-background.svg';
 import LogIN from '../assets/images/gpt-bg.jpg';
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "../stylesheets/login.css"
 import { setDoc, getDoc, doc } from "firebase/firestore";
+import { logEvent } from "firebase/analytics";
+import ReactGA from "react-ga";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -48,6 +50,13 @@ function Login() {
 
     console.log("User ", user);
 
+    ReactGA.event({
+      'category': "Login",
+      'action': "User Logged In",
+      'label': user.email,
+    });
+
+    logEvent(analytics, "login_success");
     setTimeout(() => {
       navigate("/");
     }, 2500);
@@ -79,6 +88,13 @@ function Login() {
       localStorage.setItem("token", await user.getIdToken());
       localStorage.setItem("user", user.email);
       localStorage.setItem("username", user.displayName);
+
+      ReactGA.event({
+        'category': "Login",
+        'action': "User Logged In",
+        'label': user.email,
+      });
+      logEvent(analytics, "login_success");
       setTimeout(() => {
         navigate("/");
       }, 2500);

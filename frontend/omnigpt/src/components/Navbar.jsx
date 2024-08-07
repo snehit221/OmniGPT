@@ -11,6 +11,7 @@ import logoWhite from "../assets/images/logos/logo-no-background.svg";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { unstable_batchedUpdates } from "react-dom";
+import { analytics } from "../config/firebase";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
