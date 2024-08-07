@@ -11,6 +11,8 @@ import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import ChatScreen from './pages/ChatScreen/ChatScreen';
 import About from './pages/About';
+import ContactUs from './pages/ContactUs';
+ 
 import Marketing from './pages/Marketing';
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
 
             <Route path='/login' element={<Login />} />
             <Route path='/about' element={<About />} />
+            <Route path='/contactus' element={<ContactUs />} />
  
             <Route element={<PrivateRoute />}>
               <Route path="/chat" element={<ChatScreen />} />
