@@ -14,7 +14,7 @@ import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import JoinOurTeam from './pages/JoinOurTeam';
 import Marketing from './pages/Marketing';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 
 
 ReactGA.initialize('G-VNKNHSMFJ9');

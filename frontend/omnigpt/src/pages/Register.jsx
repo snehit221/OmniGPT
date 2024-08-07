@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { logEvent } from "firebase/analytics";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 export default function Register() {
     const navigate = useNavigate()
@@ -38,9 +38,9 @@ export default function Register() {
         }
 
         ReactGA.event({
-          'category': "Registration",
-          'action': "User Registered",
-          'label': user.email,
+          category: "Registration",
+          action: "User Registered",
+          label: user.email,
         });
         logEvent(analytics, "registration_success");
         console.log("User Registered Successfully!!");
