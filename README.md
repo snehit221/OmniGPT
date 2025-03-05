@@ -64,15 +64,6 @@ Easy registration process to join our platform and start your subscription.
 Transparent and flexible pricing options tailored to different user needs.
 [View Pricing Plans](https://omnigpt-geeks.netlify.app/pricing)
 
-## Authors
-
-- **Aniket Mhatre** [B00969798]
-- **Snehit Roda** [B00917374]
-- **Heramb Kulkarni** [B00962182]
-- **Ashish Nagpal** [B00957622]
-- **Parth Karkhanis** [B00959176]
-- **Shubham Pawar** [B00969363]
-- **Shreya Kapoor** [B00957587]
 
 ## Built With
 
